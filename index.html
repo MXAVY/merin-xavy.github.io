@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Merin Xavy — Financial Analyst Portfolio</title>
 
-<!-- Google fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
 
-<!-- three.js CDN -->
+<!-- three.js -->
 <script src="https://unpkg.com/three@0.154.0/build/three.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
   :root{
@@ -32,38 +33,18 @@
     overflow-x:hidden;
   }
 
-  /* canvas background wrapper */
-  #bg-canvas{
-    position:fixed; inset:0; z-index:0; pointer-events:none;
-  }
+  /* canvas background */
+  #bg-canvas{position:fixed; inset:0; z-index:0; pointer-events:none;}
 
-  header{
-    position:relative; z-index:3;
-    display:flex; justify-content:space-between; align-items:center;
-    padding:28px clamp(18px,4vw,48px);
-  }
-  .brand{
-    display:flex; align-items:center; gap:14px;
-  }
-  .brand h1{
-    margin:0; font-family:"Playfair Display"; letter-spacing:0.8px;
-    font-size:20px; color:var(--text);
-  }
-  nav a{
-    color:var(--muted); text-decoration:none; margin-left:20px; font-weight:600;
-  }
+  header{position:relative; z-index:3; display:flex; justify-content:space-between; align-items:center; padding:28px clamp(18px,4vw,48px);}
+  .brand{display:flex; align-items:center; gap:14px;}
+  .brand h1{margin:0; font-family:"Playfair Display"; letter-spacing:0.8px; font-size:20px; color:var(--text);}
+  nav a{color:var(--muted); text-decoration:none; margin-left:20px; font-weight:600;}
   nav a:hover{color:var(--gold)}
 
-  /* hero */
-  .hero{
-    min-height:80vh; display:grid; place-items:center; position:relative; padding:48px;
-    z-index:2;
-  }
-  .hero-grid{
-    width:100%; max-width:1100px; display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:center;
-  }
+  .hero{min-height:80vh; display:grid; place-items:center; position:relative; padding:48px; z-index:2;}
+  .hero-grid{width:100%; max-width:1100px; display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:center;}
 
-  /* left - intro card */
   .intro{
     background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border: 1px solid rgba(201,163,74,0.08);
@@ -75,69 +56,54 @@
   }
   .intro h2{font-family:"Playfair Display"; font-size:34px; margin:0 0 6px}
   .intro p.lead{color:var(--muted); margin:6px 0 18px; font-size:15px}
-  .meta{
-    display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;
-  }
-  .pill{
-    background:var(--glass); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(255,255,255,0.02);
-    font-weight:600; font-size:13px;
-  }
+  .meta{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;}
+  .pill{background:var(--glass); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(255,255,255,0.02); font-weight:600; font-size:13px;}
 
-  /* CTA */
   .ctas{display:flex; gap:14px; margin-top:20px}
-  .btn{
-    background:transparent; color:var(--text); border:2px solid rgba(255,255,255,0.06);
-    padding:12px 18px; border-radius:10px; cursor:pointer; text-decoration:none; font-weight:700;
-  }
-  .btn.primary{
-    background:linear-gradient(90deg,var(--gold),rgba(201,163,74,0.85));
-    color:var(--bg); border: none; box-shadow: 0 8px 30px rgba(201,163,74,0.12);
-  }
+  .btn{background:transparent; color:var(--text); border:2px solid rgba(255,255,255,0.06); padding:12px 18px; border-radius:10px; cursor:pointer; text-decoration:none; font-weight:700;}
+  .btn.primary{background:linear-gradient(90deg,var(--gold),rgba(201,163,74,0.85)); color:var(--bg); border:none; box-shadow: 0 8px 30px rgba(201,163,74,0.12);}
 
-  /* right - profile card */
   .profile{
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border-radius:18px; padding:18px; display:flex; gap:12px; align-items:center; justify-content:center;
     border:1px solid rgba(201,163,74,0.06); position:relative; height:420px;
   }
-  .portrait{
-    width:180px; height:180px; border-radius:16px; background:linear-gradient(135deg,var(--gold),rgba(201,163,74,0.4));
-    display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--bg); font-size:34px;
-    transform:translateZ(40px);
-  }
-  .profile ul{list-style:none; padding:0; margin:0; color:var(--muted); font-size:14px}
-  .profile li{margin:8px 0}
+  .portrait{ width:180px; height:180px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--bg); font-size:34px; overflow:hidden; object-fit:cover; transform:translateZ(40px); }
 
-  /* sections */
   section{padding:80px clamp(18px,4vw,48px); z-index:2; position:relative}
   .container{max-width:1100px; margin:0 auto}
   .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px}
-  .card{
-    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
-    border-radius:14px; padding:20px; border:1px solid rgba(255,255,255,0.02);
-    box-shadow: 0 6px 20px rgba(2,6,23,0.5); transition:transform .22s, box-shadow .22s, border-color .22s;
-    transform-style:preserve-3d;
-  }
+  .card{ background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); border-radius:14px; padding:20px; border:1px solid rgba(255,255,255,0.02); box-shadow: 0 6px 20px rgba(2,6,23,0.5); transition:transform .22s, box-shadow .22s, border-color .22s; transform-style:preserve-3d;}
   .card:hover{transform:translateY(-8px) scale(1.01); border-color:rgba(201,163,74,0.12)}
   .card h3{margin:0 0 8px; color:var(--text)}
   .card p{color:var(--muted); margin:0; font-size:14px}
 
-  footer{padding:48px; text-align:center; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02)}
-
-  /* responsive */
-  @media (max-width:960px){
-    .hero-grid{grid-template-columns:1fr; gap:18px}
-    .profile{height:320px}
+  /* talent icon */
+  .talent-row{display:flex; gap:12px; align-items:center; margin-bottom:12px}
+  .talent-icon {
+    width:60px; height:60px; background: linear-gradient(135deg, var(--gold), rgba(201,163,74,0.5)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--bg); box-shadow: 0 8px 20px rgba(201,163,74,0.25); transform: translateZ(20px);
   }
 
-  /* focus and reduced motion */
+  /* timeline */
+  .timeline { margin-top: 20px; border-left: 2px solid rgba(201,163,74,0.3); padding-left: 20px; }
+  .t-item { margin-bottom: 30px; position: relative; }
+  .t-dot { width: 14px; height: 14px; background: var(--gold); border-radius: 50%; position: absolute; left: -29px; top: 4px; box-shadow: 0 4px 10px rgba(201,163,74,0.3); }
+  .t-content h4 { margin: 0; color: var(--text); }
+  .t-content p { color: var(--muted); margin: 6px 0 0; }
+
+  /* radar chart container */
+  #radar canvas { width:100%; max-width:540px; height:auto; }
+
+  footer{padding:48px; text-align:center; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02)}
+
+  @media (max-width:960px){ .hero-grid{grid-template-columns:1fr; gap:18px} .profile{height:320px} }
+
   :focus{outline:3px solid rgba(201,163,74,0.15); outline-offset:2px}
   @media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
 </style>
 </head>
 <body>
 
-<!-- three.js canvas -->
 <canvas id="bg-canvas"></canvas>
 
 <header>
@@ -149,6 +115,7 @@
     <a href="#about">About</a>
     <a href="#projects">Projects</a>
     <a href="#resume">Resume</a>
+    <a href="#behaviour">Behaviour</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
@@ -168,7 +135,8 @@
         </div>
 
         <div class="ctas">
-          <a class="btn primary" href="#resume">Download CV</a>
+          <a class="btn primary" href="Financial Analyst and Controller Resume_Merin Xavy.pdf" target="_blank" rel="noopener">Resume (EN)</a>
+          <a class="btn" href="CV Analyste Financier et Contrôleur.pdf" target="_blank" rel="noopener">CV (FR)</a>
           <a class="btn" href="#projects">View Projects</a>
         </div>
 
@@ -179,10 +147,8 @@
 
       <aside class="profile" aria-label="profile card">
         <div style="text-align:center">
-          <!-- YOUR PHOTO or LOGO -->
-          <!-- Your actual photo -->
-<img src="Linkedln.jpg" class="portrait" alt="Merin Xavy Portrait" style="object-fit:cover;">
-
+          <!-- use your uploaded photo file name here -->
+          <img src="Linkedln.jpg" alt="Merin Xavy" class="portrait">
           <ul style="margin-top:14px">
             <li><strong style="color:var(--text)">Lyon, France</strong></li>
             <li style="color:var(--muted)">Email: xavy.merin@gmail.com</li>
@@ -196,9 +162,7 @@
   <section id="about">
     <div class="container">
       <h2 style="font-family:Playfair Display">About</h2>
-      <p style="color:var(--muted);max-width:900px">
-        I’m focused on corporate controlling, risk mitigation and BI-driven financial reporting. My academic and professional experience includes designing SQL-based dashboards and improving operational latency by up to 25%. (Content sourced from resume.) :contentReference[oaicite:1]{index=1}
-      </p>
+      <p style="color:var(--muted);max-width:900px">I’m focused on corporate controlling, risk mitigation and BI-driven financial reporting. My academic and professional experience includes designing SQL-based dashboards and improving operational latency by up to 25%.</p>
     </div>
   </section>
 
@@ -206,223 +170,138 @@
     <div class="container">
       <h2 style="font-family:Playfair Display">Selected Projects</h2>
       <div class="cards" style="margin-top:20px">
-        <article class="card" tabindex="0">
-          <h3>SQL + Power BI Dashboard</h3>
-          <p>Optimized SQL queries and Power BI dashboard that increased reporting efficiency by 20% (Academic project). :contentReference[oaicite:2]{index=2}</p>
-        </article>
-        <article class="card" tabindex="0">
-          <h3>Process Optimization — Inventure Metal</h3>
-          <p>Invoice reconciliation and validation processes reduced processing latency by 25% (Finance & Accounting Intern). :contentReference[oaicite:3]{index=3}</p>
-        </article>
-        <article class="card" tabindex="0">
-          <h3>Algorithmic Risk Simulation</h3>
-          <p>Applied risk controls and reduced settlement discrepancies by 20% (Goldman Sachs Virtual Program). :contentReference[oaicite:4]{index=4}</p>
-        </article>
+        <a href="https://github.com/mxavy/powerbi-dashboard" target="_blank" style="text-decoration:none">
+          <article class="card" tabindex="0">
+            <h3>SQL + Power BI Dashboard</h3>
+            <p>Optimized SQL queries and Power BI dashboard improving reporting efficiency.</p>
+          </article>
+        </a>
+
+        <a href="https://github.com/mxavy/inventure-metal-analysis" target="_blank" style="text-decoration:none">
+          <article class="card" tabindex="0">
+            <h3>Process Optimization — Inventure Metal</h3>
+            <p>Invoice reconciliation workflow reducing processing latency by 25%.</p>
+          </article>
+        </a>
+
+        <a href="https://github.com/mxavy/goldman-risk-simulation" target="_blank" style="text-decoration:none">
+          <article class="card" tabindex="0">
+            <h3>Algorithmic Risk Simulation</h3>
+            <p>Simulated risk controls reducing settlement discrepancies by 20%.</p>
+          </article>
+        </a>
       </div>
     </div>
   </section>
 
-  <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
-  <!-- English Resume -->
-  <a class="btn primary" href="Financial Analyst and Controller Resume_Merin Xavy.pdf" target="_blank" rel="noopener">
-    Resume (English)
-  </a>
-
-  <!-- French Resume -->
-  <a class="btn" href="CV Analyste Financier et Contrôleur.pdf" target="_blank" rel="noopener">
-    CV (Français)
-  </a>
-</div>
-
-
-  <section id="contact">
+  <!-- Behavioural Analysis (Option A: integrated, compact) -->
+  <section id="behaviour">
     <div class="container">
-      <h2 style="font-family:Playfair Display">Contact</h2>
-      <p style="color:var(--muted)">Interested in working together? Email me at <strong style="color:var(--text)">xavy.merin@gmail.com</strong> or send a message on LinkedIn.</p>
+      <h2 style="font-family:Playfair Display">Behavioural Analysis</h2>
+      <p style="color:var(--muted); max-width:900px;">
+        My behavioural strengths are based on my Plum.io Talent Assessment. These talents highlight how I influence, collaborate, and adapt in dynamic environments.
+      </p>
+
+      <!-- Top Talents cards with 3D icons -->
+      <div class="cards" style="margin-top:20px">
+        <article class="card">
+          <div class="talent-row">
+            <div class="talent-icon">🗣️</div>
+            <div>
+              <h3>Persuasion</h3>
+              <p style="color:var(--muted); font-size:14px;"><strong>The ability to convince others of a direction, activity or idea, and influence decision-making.</strong></p>
+            </div>
+          </div>
+          <p style="font-size:14px; color:var(--muted); margin-top:6px;">
+            Merin is:
+            <br>• Very capable of being tactful and finding mutually agreeable solutions.
+            <br>• Excellent at understanding peoples' motivations and feelings.
+            <br>• Skilled at motivating others to change.
+            <br>• Able to sway the thinking and behavior of individuals who initially disagree.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="talent-row">
+            <div class="talent-icon">🤝</div>
+            <div>
+              <h3>Conflict Resolution</h3>
+              <p style="color:var(--muted); font-size:14px;"><strong>The ability to bring others together to resolve conflicts and reconcile differences.</strong></p>
+            </div>
+          </div>
+          <p style="font-size:14px; color:var(--muted); margin-top:6px;">
+            Merin is:
+            <br>• Highly considerate and aims for mutually beneficial solutions.
+            <br>• Good at encouraging respect and showing sensitivity.
+            <br>• Exceptional at finding effective strategies to resolve conflict.
+            <br>• Extraordinary at staying calm and impartial during conflict.
+            <br>• Strong at analyzing information to determine the best solution.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="talent-row">
+            <div class="talent-icon">🔄</div>
+            <div>
+              <h3>Adaptation</h3>
+              <p style="color:var(--muted); font-size:14px;"><strong>The ability to adjust to changes in the workplace while maintaining a positive demeanor.</strong></p>
+            </div>
+          </div>
+          <p style="font-size:14px; color:var(--muted); margin-top:6px;">
+            Merin is:
+            <br>• Capable of navigating changes and new environments.
+            <br>• Excellent at overcoming obstacles and ambiguity.
+            <br>• Extraordinary at staying calm and effective under pressure.
+            <br>• Strong at dealing positively with challenges related to change.
+          </p>
+        </article>
+      </div>
+
+      <!-- timeline (compact) -->
+      <div class="timeline" style="margin-top:22px">
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-content">
+            <h4>2022 – Persuasion Peaks</h4>
+            <p>Improved influence & negotiation through academic leadership projects.</p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-content">
+            <h4>2023 – Conflict Resolution Mastery</h4>
+            <p>Strengthened interpersonal problem-solving during multicultural teamwork.</p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-content">
+            <h4>2024 – Adaptability in Action</h4>
+            <p>Successfully adapted to new roles, countries, and environments while maintaining performance.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- radar chart -->
+      <div id="radar" style="margin-top:28px">
+        <h3 style="margin:0 0 8px">Soft-Skills Radar</h3>
+        <canvas id="skillsRadar"></canvas>
+      </div>
+
+      <div style="margin-top:20px;">
+        <a class="btn primary" href="https://secure.plum.io/en/fp/j_72p0Pv7qSWGKQC9C_cfg" target="_blank" rel="noopener">View Full Plum Profile</a>
+        <a class="btn" href="softskills.html" target="_blank" style="margin-left:12px">Soft Skills CV</a>
+      </div>
+
     </div>
   </section>
-</main>
 
-  <section id="behaviour">
-  <div class="container">
-    <h2 style="font-family:Playfair Display">Behavioural Analysis</h2>
-
-    <p style="color:var(--muted); max-width:900px;">
-      My behavioural strengths are based on my Plum.io Talent Assessment.  
-      These talents highlight how I influence, collaborate, and adapt in dynamic environments.
-    </p>
-
-    <div class="cards" style="margin-top:20px">
-
-      <!-- Persuasion -->
-      <article class="card">
-        <h3>Persuasion</h3>
-        <p style="color:var(--muted); font-size:14px;">
-          <strong>The ability to convince others of a direction, activity or idea, and influence decision-making.</strong>
-        </p>
-        <p style="font-size:14px; color:var(--muted); margin-top:10px;">
-          Merin is:
-          <br>• Very capable of being tactful and finding mutually agreeable solutions.
-          <br>• Excellent at understanding peoples' motivations and feelings.
-          <br>• Skilled at motivating others to change.
-          <br>• Able to sway the thinking and behavior of individuals who initially disagree.
-        </p>
-      </article>
-
-      <!-- Conflict Resolution -->
-      <article class="card">
-        <h3>Conflict Resolution</h3>
-        <p style="color:var(--muted); font-size:14px;">
-          <strong>The ability to bring others together to resolve conflicts and reconcile differences.</strong>
-        </p>
-        <p style="font-size:14px; color:var(--muted); margin-top:10px;">
-          Merin is:
-          <br>• Highly considerate and aims for mutually beneficial solutions.
-          <br>• Good at encouraging respect and showing sensitivity.
-          <br>• Exceptional at finding effective strategies to resolve conflict.
-          <br>• Extraordinary at staying calm and impartial during conflict.
-          <br>• Strong at analyzing information to determine the best solution.
-        </p>
-      </article>
-
-      <!-- Adaptation -->
-      <article class="card">
-        <h3>Adaptation</h3>
-        <p style="color:var(--muted); font-size:14px;">
-          <strong>The ability to adjust to changes in the workplace while maintaining a positive demeanor.</strong>
-        </p>
-        <p style="font-size:14px; color:var(--muted); margin-top:10px;">
-          Merin is:
-          <br>• Capable of navigating changes and new environments.
-          <br>• Excellent at overcoming obstacles and ambiguity.
-          <br>• Extraordinary at staying calm and effective under pressure.
-          <br>• Strong at dealing positively with challenges related to change.
-        </p>
-      </article>
-
-    </div>
-
-    <div style="margin-top:20px;">
-      <a class="btn primary" 
-         href="https://secure.plum.io/en/fp/j_72p0Pv7qSWGKQC9C_cfg" 
-         target="_blank" 
-         rel="noopener">
-         View Full Plum Profile
-      </a>
-    </div>
-
-  </div>
-</section>
-
-<footer>
-  © <span id="yr"></span> Merin Xavy — Built with care & data-driven design
-</footer>
-
-<script>
-/* small helpers */
-document.getElementById('yr').textContent = new Date().getFullYear();
-
-/* tilt effect for intro card */
-const card = document.getElementById('tilt-card');
-card.addEventListener('mousemove', (e) => {
-  const rect = card.getBoundingClientRect();
-  const x = (e.clientX - rect.left) / rect.width;
-  const y = (e.clientY - rect.top) / rect.height;
-  const rotateY = (x - 0.5) * 14; // degrees
-  const rotateX = (0.5 - y) * 10;
-  card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(6px)`;
-  card.style.boxShadow = "0 18px 40px rgba(2,6,23,0.6)";
-});
-card.addEventListener('mouseleave', () => {
-  card.style.transform = 'none';
-  card.style.boxShadow = '';
-});
-
-/* simple focus-visible */
-document.querySelectorAll('.card, .btn, nav a').forEach(el => {
-  el.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ el.click(); } });
-});
-
-/* three.js animated background (floating particles + shapes) */
-(()=> {
-  const canvas = document.getElementById('bg-canvas');
-  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-  let w = innerWidth, h = innerHeight;
-  renderer.setSize(w,h);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  const scene = new THREE.Scene();
-
-  const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 2000);
-  camera.position.set(0,0,80);
-
-  // group of floating icosahedrons
-  const group = new THREE.Group();
-  const geo = new THREE.IcosahedronGeometry(3, 1);
-  const mat = new THREE.MeshStandardMaterial({color:0xC9A34A, metalness:0.7, roughness:0.35, transparent:true, opacity:0.95});
-  for(let i=0;i<18;i++){
-    const m = new THREE.Mesh(geo, mat.clone());
-    m.position.set((Math.random()-0.5)*120, (Math.random()-0.5)*80, (Math.random()-0.5)*200);
-    m.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);
-    m.scale.setScalar(0.8 + Math.random()*1.6);
-    m.material.opacity = 0.12 + Math.random()*0.6;
-    group.add(m);
-  }
-  scene.add(group);
-
-  // soft lights
-  const light = new THREE.DirectionalLight(0xffffff, 0.8);
-  light.position.set(10,20,50);
-  scene.add(light);
-  const amb = new THREE.AmbientLight(0xffffff, 0.12);
-  scene.add(amb);
-
-  // particles
-  const partGeo = new THREE.BufferGeometry();
-  const pts = 600;
-  const positions = new Float32Array(pts * 3);
-  for(let i=0;i<pts;i++){
-    positions[i*3] = (Math.random()-0.5)*500;
-    positions[i*3+1] = (Math.random()-0.5)*300;
-    positions[i*3+2] = (Math.random()-0.5)*800;
-  }
-  partGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
-  const partMat = new THREE.PointsMaterial({size:1.8, color:0xFFFFFF, opacity:0.06, transparent:true});
-  const particles = new THREE.Points(partGeo, partMat);
-  scene.add(particles);
-
-  // resize
-  window.addEventListener('resize', () => {
-    w = innerWidth; h = innerHeight;
-    renderer.setSize(w,h);
-    camera.aspect = w/h; camera.updateProjectionMatrix();
-  });
-
-  let t = 0;
-  function anim(){
-    t += 0.005;
-    group.rotation.y += 0.0016;
-    group.children.forEach((m,i) => {
-      m.rotation.x += 0.003 + (i%3)*0.0006;
-      m.position.y += Math.sin(t + i) * 0.01;
-    });
-    particles.rotation.y += 0.0005;
-    camera.position.x = Math.sin(t*0.3)*18;
-    camera.lookAt(0,0,0);
-    renderer.render(scene, camera);
-    requestAnimationFrame(anim);
-  }
-  anim();
-})();
-
-/* smooth scroll for nav */
-document.querySelectorAll('nav a').forEach(a=>{
-  a.addEventListener('click', (e)=>{
-    e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
-    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
-  });
-});
-</script>
-
-</body>
-</html>
+  <section id="resume">
+    <div class="container">
+      <h2 style="font-family:Playfair Display">Resume</h2>
+      <p style="color:var(--muted)">Download full resumes:</p>
+      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a class="btn primary" href="Financial Analyst and Controller Resume_Merin Xavy.pdf" target="_blank" rel="noopener">Resume (English)</a>
+        <a class="btn" href="CV Analyste Financier et Contrôleur.pdf" target="_blank" rel="noopener">CV (Français)</a>
