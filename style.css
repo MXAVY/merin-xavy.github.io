@@ -1,0 +1,162 @@
+/* --- 1. Global Reset & Typography --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f9; /* Very light grey/blue for a clean background */
+    color: #333; /* Dark text */
+}
+
+h1, h2, h3, h4 {
+    color: #1a4a6b; /* Dark Blue - Professional header color */
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.2em;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #555; /* Slightly lighter for the secondary headline */
+}
+
+a {
+    color: #007bff; /* Standard link blue */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3; /* Darker blue on hover */
+    text-decoration: underline;
+}
+
+/* --- 2. Layout & Header --- */
+header {
+    background-color: #ffffff;
+    padding: 30px 5%;
+    text-align: center;
+    border-bottom: 4px solid #1a4a6b; /* Strong separator line */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.value-prop {
+    max-width: 700px;
+    margin: 15px auto 20px auto;
+    font-size: 1.1em;
+    color: #444;
+}
+
+/* Navigation */
+nav {
+    margin-top: 20px;
+    padding-bottom: 10px;
+}
+
+nav a {
+    margin: 0 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #1a4a6b;
+    border-bottom: 2px solid transparent;
+}
+
+nav a:hover {
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+    text-decoration: none;
+}
+
+/* Skills Bar */
+.skills-bar {
+    margin: 20px auto;
+    padding: 10px 0;
+    max-width: 800px;
+    font-size: 0.9em;
+    color: #555;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.skills-bar span {
+    font-weight: 700;
+    margin: 0 5px;
+}
+
+
+/* --- 3. Main Content Sections --- */
+section {
+    padding: 40px 5%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+#projects, #about {
+    margin-bottom: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+#projects h3, #about h3 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Project Cards */
+.project-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid #007bff; /* Highlight bar */
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.project-card h4 {
+    margin-top: 0;
+    color: #1a4a6b;
+    font-size: 1.2em;
+}
+
+.project-card a {
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* About Section */
+#about ul {
+    list-style: none;
+    padding: 0;
+}
+
+#about li {
+    background: #eef3f7; /* Soft background for list items */
+    margin: 5px 0;
+    padding: 8px 15px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+
+/* --- 4. Footer --- */
+footer {
+    background-color: #1a4a6b; /* Dark Blue Footer */
+    color: #fff;
+    text-align: center;
+    padding: 20px 5%;
+    font-size: 0.9em;
+}
+
+footer a {
+    color: #a0d4ff;
+}
+
+footer a:hover {
+    color: #fff;
+}
