@@ -13,42 +13,42 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-  :root{
-  --bg: #101829;              /* Bright luxury dark */
+:root{
+  --bg: #101829;
   --card: rgba(255,255,255,0.12);
-  --text: #1A1A1A;            /* Deep charcoal */
-  --text-light: #444;         /* Body text */
-  --muted: #5B6073;           /* Subtext */
-  --gold: #D4AF37;            /* Royal Gold */
+  --text: #1A1A1A;
+  --text-light: #444;
+  --muted: #5B6073;
+  --gold: #D4AF37;
   --card-shadow: 0 20px 40px rgba(0,0,0,0.12);
-  --highlight: #FAF7F2;       /* Soft pearl */
+  --highlight: #FAF7F2;
 }
 
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    background: linear-gradient(to bottom, #FAF7F2, #F3EEE6);
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    overflow-x:hidden;
-  }
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  background: linear-gradient(to bottom, #FAF7F2, #F3EEE6);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
 
-  /* canvas background */
-  #bg-canvas{position:fixed; inset:0; z-index:0; pointer-events:none;}
+/* canvas background */
+#bg-canvas{position:fixed; inset:0; z-index:0; pointer-events:none;}
 
-  header{position:relative; z-index:3; display:flex; justify-content:space-between; align-items:center; padding:28px clamp(18px,4vw,48px);}
-  .brand{display:flex; align-items:center; gap:14px;}
-  .brand h1{margin:0; font-family:"Playfair Display"; letter-spacing:0.8px; font-size:20px; color:var(--text);}
-  nav a{color:var(--muted); text-decoration:none; margin-left:20px; font-weight:600;}
-  nav a:hover{color:var(--gold)}
+header{position:relative; z-index:3; display:flex; justify-content:space-between; align-items:center; padding:28px clamp(18px,4vw,48px);}
+.brand{display:flex; align-items:center; gap:14px;}
+.brand h1{margin:0; font-family:"Playfair Display"; letter-spacing:0.8px; font-size:20px; color:var(--text);}
+nav a{color:var(--muted); text-decoration:none; margin-left:20px; font-weight:600;}
+nav a:hover{color:var(--gold)}
 
-  .hero{min-height:80vh; display:grid; place-items:center; position:relative; padding:48px; z-index:2;}
-  .hero-grid{width:100%; max-width:1100px; display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:center;}
+.hero{min-height:80vh; display:grid; place-items:center; position:relative; padding:48px; z-index:2;}
+.hero-grid{width:100%; max-width:1100px; display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:center;}
 
- .intro, .card, .profile {
+.intro, .card, .profile {
   background: var(--highlight);
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 20px;
@@ -56,85 +56,56 @@
   color: var(--text);
 }
 
-  .intro h2{font-family:"Playfair Display"; font-size:34px; margin:0 0 6px}
-  .intro p.lead{color:var(--muted); margin:6px 0 18px; font-size:15px}
-  .meta{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;}
-  .pill{background:var(--glass); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(255,255,255,0.02); font-weight:600; font-size:13px;}
+.intro h2{font-family:"Playfair Display"; font-size:34px; margin:0 0 6px;}
+.intro p.lead{color:var(--muted); margin:6px 0 18px; font-size:15px;}
+.meta{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;}
+.pill{background:var(--card); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(255,255,255,0.02); font-weight:600; font-size:13px;}
 
-  .ctas{display:flex; gap:14px; margin-top:20px}
-  .btn{background:transparent; color:var(--text); border:2px solid rgba(255,255,255,0.06); padding:12px 18px; border-radius:10px; cursor:pointer; text-decoration:none; font-weight:700;}
-  .btn.primary{background:linear-gradient(90deg,var(--gold),rgba(201,163,74,0.85)); color:var(--bg); border:none; box-shadow: 0 8px 30px rgba(201,163,74,0.12);}
+.ctas{display:flex; gap:14px; margin-top:20px;}
+.btn{background:transparent; color:var(--text); border:2px solid rgba(255,255,255,0.06); padding:12px 18px; border-radius:10px; cursor:pointer; text-decoration:none; font-weight:700;}
+.btn.primary{background:linear-gradient(90deg,var(--gold),rgba(201,163,74,0.85)); color:var(--bg); border:none; box-shadow: 0 8px 30px rgba(201,163,74,0.12);}
 
-  .profile{
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius:18px; padding:18px; display:flex; gap:12px; align-items:center; justify-content:center;
-    border:1px solid rgba(201,163,74,0.06); position:relative; height:420px;
-  }
-  .portrait {
+.profile{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:18px; padding:18px; display:flex; gap:12px; align-items:center; justify-content:center;
+  border:1px solid rgba(201,163,74,0.06); position:relative; height:420px;
+}
+.portrait {
   width: 210px;
   height: 210px;
   border-radius: 20px;
   overflow: hidden;
   object-fit: cover;
-
-  /* 3D card effect */
   transform-style: preserve-3d;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
-    const profile = document.querySelector('.portrait');
-
-profile.addEventListener('mousemove', (e) => {
-    const rect = profile.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-
-    const rotateY = (x - 0.5) * 16;
-    const rotateX = (0.5 - y) * 16;
-
-    profile.style.transform =
-      `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.06)`;
-    profile.style.boxShadow =
-      `0 20px 50px rgba(0,0,0,0.2),
-       0 0 40px rgba(212,175,55,0.4)`;
-});
-
-profile.addEventListener('mouseleave', () => {
-    profile.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
-    profile.style.boxShadow =
-      `0 10px 25px rgba(0,0,0,0.15),
-       0 0 25px rgba(212,175,55,0.25)`;
-});
-
-
-  /* luxury glow border */
   border: 3px solid rgba(212,175,55,0.4);
   box-shadow:
      0 10px 25px rgba(0,0,0,0.15),
      0 0 25px rgba(212,175,55,0.25);
 }
 
+/* talent icon */
+.talent-row{display:flex; gap:12px; align-items:center; margin-bottom:12px;}
+.talent-icon {
+  width:60px; height:60px; background: linear-gradient(135deg, var(--gold), rgba(201,163,74,0.5)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--bg); box-shadow: 0 8px 20px rgba(201,163,74,0.25); transform: translateZ(20px);
+}
 
-  /* talent icon */
-  .talent-row{display:flex; gap:12px; align-items:center; margin-bottom:12px}
-  .talent-icon {
-    width:60px; height:60px; background: linear-gradient(135deg, var(--gold), rgba(201,163,74,0.5)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--bg); box-shadow: 0 8px 20px rgba(201,163,74,0.25); transform: translateZ(20px);
-  }
+/* timeline */
+.timeline { margin-top: 20px; border-left: 2px solid rgba(201,163,74,0.3); padding-left: 20px; }
+.t-item { margin-bottom: 30px; position: relative; }
+.t-dot { width: 14px; height: 14px; background: var(--gold); border-radius: 50%; position: absolute; left: -29px; top: 4px; box-shadow: 0 4px 10px rgba(201,163,74,0.3); }
+.t-content h4 { margin: 0; color: var(--text); }
+.t-content p { color: var(--muted); margin: 6px 0 0; }
 
-  /* timeline */
-  .timeline { margin-top: 20px; border-left: 2px solid rgba(201,163,74,0.3); padding-left: 20px; }
-  .t-item { margin-bottom: 30px; position: relative; }
-  .t-dot { width: 14px; height: 14px; background: var(--gold); border-radius: 50%; position: absolute; left: -29px; top: 4px; box-shadow: 0 4px 10px rgba(201,163,74,0.3); }
-  .t-content h4 { margin: 0; color: var(--text); }
-  .t-content p { color: var(--muted); margin: 6px 0 0; }
+/* radar chart container */
+#radar canvas { width:100%; max-width:540px; height:auto; }
 
-  /* radar chart container */
-  #radar canvas { width:100%; max-width:540px; height:auto; }
+footer{padding:48px; text-align:center; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02)}
 
-  footer{padding:48px; text-align:center; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02)}
+@media (max-width:960px){ .hero-grid{grid-template-columns:1fr; gap:18px} .profile{height:320px} }
 
-  @media (max-width:960px){ .hero-grid{grid-template-columns:1fr; gap:18px} .profile{height:320px} }
-
-  :focus{outline:3px solid rgba(201,163,74,0.15); outline-offset:2px}
-  @media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
+:focus{outline:3px solid rgba(201,163,74,0.15); outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
 </style>
 </head>
 <body>
@@ -182,7 +153,6 @@ profile.addEventListener('mouseleave', () => {
 
       <aside class="profile" aria-label="profile card">
         <div style="text-align:center">
-          <!-- use your uploaded photo file name here -->
           <img src="Linkedln.jpg" alt="Merin Xavy" class="portrait">
           <ul style="margin-top:14px">
             <li><strong style="color:var(--text)">Lyon, France</strong></li>
@@ -194,149 +164,36 @@ profile.addEventListener('mouseleave', () => {
     </div>
   </section>
 
-  <section id="about">
-    <div class="container">
-      <h2 style="font-family:Playfair Display">About</h2>
-      <p style="color:var(--muted);max-width:900px">I’m focused on corporate controlling, risk mitigation and BI-driven financial reporting. My academic and professional experience includes designing SQL-based dashboards and improving operational latency by up to 25%.</p>
-    </div>
-  </section>
+  <!-- Add other sections like About, Projects, Behaviour, Resume here... same as your current version -->
 
-  <section id="projects">
-    <div class="container">
-      <h2 style="font-family:Playfair Display">Selected Projects</h2>
-      <div class="cards" style="margin-top:20px">
-        <a href="https://github.com/mxavy/powerbi-dashboard" target="_blank" style="text-decoration:none">
-          <article class="card" tabindex="0">
-            <h3>SQL + Power BI Dashboard</h3>
-            <p>Optimized SQL queries and Power BI dashboard improving reporting efficiency.</p>
-          </article>
-        </a>
+</main>
 
-        <a href="https://github.com/mxavy/inventure-metal-analysis" target="_blank" style="text-decoration:none">
-          <article class="card" tabindex="0">
-            <h3>Process Optimization — Inventure Metal</h3>
-            <p>Invoice reconciliation workflow reducing processing latency by 25%.</p>
-          </article>
-        </a>
+<!-- 3D profile tilt JS -->
+<script>
+const profile = document.querySelector('.portrait');
 
-        <a href="https://github.com/mxavy/goldman-risk-simulation" target="_blank" style="text-decoration:none">
-          <article class="card" tabindex="0">
-            <h3>Algorithmic Risk Simulation</h3>
-            <p>Simulated risk controls reducing settlement discrepancies by 20%.</p>
-          </article>
-        </a>
-      </div>
-    </div>
-  </section>
+profile.addEventListener('mousemove', (e) => {
+    const rect = profile.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
 
-  <!-- Behavioural Analysis (Option A: integrated, compact) -->
-  <section id="behaviour">
-    <div class="container">
-      <h2 style="font-family:Playfair Display">Behavioural Analysis</h2>
-      <p style="color:var(--muted); max-width:900px;">
-        My behavioural strengths are based on my Plum.io Talent Assessment. These talents highlight how I influence, collaborate, and adapt in dynamic environments.
-      </p>
+    const rotateY = (x - 0.5) * 16;
+    const rotateX = (0.5 - y) * 16;
 
-      <!-- Top Talents cards with 3D icons -->
-      <div class="cards" style="margin-top:20px">
-        <article class="card">
-          <div class="talent-row">
-            <div class="talent-icon">🗣️</div>
-            <div>
-              <h3>Persuasion</h3>
-              <p style="color:var(--muted); font-size:14px;"><strong>The ability to convince others of a direction, activity or idea, and influence decision-making.</strong></p>
-            </div>
-          </div>
-          <p style="font-size:14px; color:var(--muted); margin-top:6px;">
-            Merin is:
-            <br>• Very capable of being tactful and finding mutually agreeable solutions.
-            <br>• Excellent at understanding peoples' motivations and feelings.
-            <br>• Skilled at motivating others to change.
-            <br>• Able to sway the thinking and behavior of individuals who initially disagree.
-          </p>
-        </article>
+    profile.style.transform =
+      `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.06)`;
+    profile.style.boxShadow =
+      `0 20px 50px rgba(0,0,0,0.2),
+       0 0 40px rgba(212,175,55,0.4)`;
+});
 
-        <article class="card">
-          <div class="talent-row">
-            <div class="talent-icon">🤝</div>
-            <div>
-              <h3>Conflict Resolution</h3>
-              <p style="color:var(--muted); font-size:14px;"><strong>The ability to bring others together to resolve conflicts and reconcile differences.</strong></p>
-            </div>
-          </div>
-          <p style="font-size:14px; color:var(--muted); margin-top:6px;">
-            Merin is:
-            <br>• Highly considerate and aims for mutually beneficial solutions.
-            <br>• Good at encouraging respect and showing sensitivity.
-            <br>• Exceptional at finding effective strategies to resolve conflict.
-            <br>• Extraordinary at staying calm and impartial during conflict.
-            <br>• Strong at analyzing information to determine the best solution.
-          </p>
-        </article>
+profile.addEventListener('mouseleave', () => {
+    profile.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+    profile.style.boxShadow =
+      `0 10px 25px rgba(0,0,0,0.15),
+       0 0 25px rgba(212,175,55,0.25)`;
+});
+</script>
 
-        <article class="card">
-          <div class="talent-row">
-            <div class="talent-icon">🔄</div>
-            <div>
-              <h3>Adaptation</h3>
-              <p style="color:var(--muted); font-size:14px;"><strong>The ability to adjust to changes in the workplace while maintaining a positive demeanor.</strong></p>
-            </div>
-          </div>
-          <p style="font-size:14px; color:var(--muted); margin-top:6px;">
-            Merin is:
-            <br>• Capable of navigating changes and new environments.
-            <br>• Excellent at overcoming obstacles and ambiguity.
-            <br>• Extraordinary at staying calm and effective under pressure.
-            <br>• Strong at dealing positively with challenges related to change.
-          </p>
-        </article>
-      </div>
-
-      <!-- timeline (compact) -->
-      <div class="timeline" style="margin-top:22px">
-        <div class="t-item">
-          <div class="t-dot"></div>
-          <div class="t-content">
-            <h4>2022 – Persuasion Peaks</h4>
-            <p>Improved influence & negotiation through academic leadership projects.</p>
-          </div>
-        </div>
-
-        <div class="t-item">
-          <div class="t-dot"></div>
-          <div class="t-content">
-            <h4>2023 – Conflict Resolution Mastery</h4>
-            <p>Strengthened interpersonal problem-solving during multicultural teamwork.</p>
-          </div>
-        </div>
-
-        <div class="t-item">
-          <div class="t-dot"></div>
-          <div class="t-content">
-            <h4>2024 – Adaptability in Action</h4>
-            <p>Successfully adapted to new roles, countries, and environments while maintaining performance.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- radar chart -->
-      <div id="radar" style="margin-top:28px">
-        <h3 style="margin:0 0 8px">Soft-Skills Radar</h3>
-        <canvas id="skillsRadar"></canvas>
-      </div>
-
-      <div style="margin-top:20px;">
-        <a class="btn primary" href="https://secure.plum.io/en/fp/j_72p0Pv7qSWGKQC9C_cfg" target="_blank" rel="noopener">View Full Plum Profile</a>
-        <a class="btn" href="softskills.html" target="_blank" style="margin-left:12px">Soft Skills CV</a>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="resume">
-    <div class="container">
-      <h2 style="font-family:Playfair Display">Resume</h2>
-      <p style="color:var(--muted)">Download full resumes:</p>
-      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
-        <a class="btn primary" href="Financial Analyst and Controller Resume_Merin Xavy.pdf" target="_blank" rel="noopener">Resume (English)</a>
-        <a class="btn" href="CV Analyste Financier et Contrôleur.pdf" target="_blank" rel="noopener">CV (Français)</a>
+</body>
+</html>
