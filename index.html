@@ -1,70 +1,354 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merin Xavy | Financial Analyst & Controller Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Merin Xavy — Financial Analyst Portfolio</title>
+
+<!-- Google fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
+
+<!-- three.js CDN -->
+<script src="https://unpkg.com/three@0.154.0/build/three.min.js"></script>
+
+<style>
+  :root{
+    --bg: #0B1220;
+    --gold: #C9A34A;
+    --text: #F6F2EB;
+    --muted: #6B7785;
+    --glass: rgba(255,255,255,0.03);
+    --card-shadow: 0 10px 30px rgba(2,6,23,0.6);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
+  }
+
+  /* canvas background wrapper */
+  #bg-canvas{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+  }
+
+  header{
+    position:relative; z-index:3;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:28px clamp(18px,4vw,48px);
+  }
+  .brand{
+    display:flex; align-items:center; gap:14px;
+  }
+  .brand h1{
+    margin:0; font-family:"Playfair Display"; letter-spacing:0.8px;
+    font-size:20px; color:var(--text);
+  }
+  nav a{
+    color:var(--muted); text-decoration:none; margin-left:20px; font-weight:600;
+  }
+  nav a:hover{color:var(--gold)}
+
+  /* hero */
+  .hero{
+    min-height:80vh; display:grid; place-items:center; position:relative; padding:48px;
+    z-index:2;
+  }
+  .hero-grid{
+    width:100%; max-width:1100px; display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:center;
+  }
+
+  /* left - intro card */
+  .intro{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border: 1px solid rgba(201,163,74,0.08);
+    padding:34px; border-radius:18px;
+    box-shadow: var(--card-shadow);
+    transform-style:preserve-3d;
+    transition: transform .22s cubic-bezier(.2,.9,.3,1), box-shadow .22s;
+    perspective:1000px;
+  }
+  .intro h2{font-family:"Playfair Display"; font-size:34px; margin:0 0 6px}
+  .intro p.lead{color:var(--muted); margin:6px 0 18px; font-size:15px}
+  .meta{
+    display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;
+  }
+  .pill{
+    background:var(--glass); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(255,255,255,0.02);
+    font-weight:600; font-size:13px;
+  }
+
+  /* CTA */
+  .ctas{display:flex; gap:14px; margin-top:20px}
+  .btn{
+    background:transparent; color:var(--text); border:2px solid rgba(255,255,255,0.06);
+    padding:12px 18px; border-radius:10px; cursor:pointer; text-decoration:none; font-weight:700;
+  }
+  .btn.primary{
+    background:linear-gradient(90deg,var(--gold),rgba(201,163,74,0.85));
+    color:var(--bg); border: none; box-shadow: 0 8px 30px rgba(201,163,74,0.12);
+  }
+
+  /* right - profile card */
+  .profile{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px; padding:18px; display:flex; gap:12px; align-items:center; justify-content:center;
+    border:1px solid rgba(201,163,74,0.06); position:relative; height:420px;
+  }
+  .portrait{
+    width:180px; height:180px; border-radius:16px; background:linear-gradient(135deg,var(--gold),rgba(201,163,74,0.4));
+    display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--bg); font-size:34px;
+    transform:translateZ(40px);
+  }
+  .profile ul{list-style:none; padding:0; margin:0; color:var(--muted); font-size:14px}
+  .profile li{margin:8px 0}
+
+  /* sections */
+  section{padding:80px clamp(18px,4vw,48px); z-index:2; position:relative}
+  .container{max-width:1100px; margin:0 auto}
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+    border-radius:14px; padding:20px; border:1px solid rgba(255,255,255,0.02);
+    box-shadow: 0 6px 20px rgba(2,6,23,0.5); transition:transform .22s, box-shadow .22s, border-color .22s;
+    transform-style:preserve-3d;
+  }
+  .card:hover{transform:translateY(-8px) scale(1.01); border-color:rgba(201,163,74,0.12)}
+  .card h3{margin:0 0 8px; color:var(--text)}
+  .card p{color:var(--muted); margin:0; font-size:14px}
+
+  footer{padding:48px; text-align:center; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02)}
+
+  /* responsive */
+  @media (max-width:960px){
+    .hero-grid{grid-template-columns:1fr; gap:18px}
+    .profile{height:320px}
+  }
+
+  /* focus and reduced motion */
+  :focus{outline:3px solid rgba(201,163,74,0.15); outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
+</style>
 </head>
 <body>
-    <header>
-        [cite_start]<h1>Merin Xavy [cite: 1]</h1>
-        [cite_start]<h2>Corporate Controlling, Financial Analysis, and Risk/Compliance Specialist [cite: 4]</h2>
-        [cite_start]<p class="value-prop">Driving Performance Management through data-driven analysis (**SQL, Power BI**) and implementing robust **Internal Control Frameworks**[cite: 4, 5]. [cite_start]Proven success in reducing operational latency by up to **25%**[cite: 6, 20].</p>
-        
-        <section class="skills-bar">
-            [cite_start]<span>SQL</span> [cite: 8] | 
-            [cite_start]<span>Power BI</span> [cite: 8] | 
-            [cite_start]<span>Advanced Excel (VBA)</span> [cite: 9] | 
-            [cite_start]<span>Internal Control Frameworks</span> [cite: 10] | 
-            [cite_start]<span>Forecasting & Budgeting</span> [cite: 9, 22, 25]
-        </section>
-        
-        <nav>
-            <a href="#projects">Case Studies</a>
-            <a href="#about">About Merin</a>
-            <a href="[Link to Resume PDF]" target="_blank">Download Resume</a> 
-            </nav>
-    </header>
 
-    <section id="projects">
-        <h3>Key Case Studies & Data Projects</h3>
-        <div class="project-card">
-            <h4>SQL & Power BI Dashboard Development (Academic Project)</h4>
-            [cite_start]<p>Developed optimized SQL queries for data integration and designed Power BI dashboards that **increased reporting efficiency by 20%**[cite: 29].</p>
-            <a href="[Link to Dashboard/GitHub Code]" target="_blank">View Artifacts & Code (GitHub)</a>
-        </div>
-        
-        <div class="project-card">
-            <h4>Financial Process Optimization & Risk Mitigation (Inventure Metal Products)</h4>
-            [cite_start]<p>Implemented structured internal controls and data validation processes that **reduced financial exposure to receivable risks by 25%**[cite: 21]. [cite_start]Optimized end-to-end data processing workflows to reduce processing latency by **25%**[cite: 20].</p>
-            <a href="[Link to Detailed Process Documentation]" target="_blank">View Process Documentation</a>
-        </div>
-        
-        <div class="project-card">
-            <h4>Algorithmic Risk Simulation & Due Diligence (Goldman Sachs Virtual Program)</h4>
-            [cite_start]<p>Applied risk and compliance controls, generating comprehensive financial due diligence reports using Advanced Excel[cite: 31]. [cite_start]**Reduced settlement discrepancies (error rate) by 20%**[cite: 31].</p>
-            <a href="[Link to Model/Report Sample]" target="_blank">View Simulation Model</a>
-        </div>
-    </section>
+<!-- three.js canvas -->
+<canvas id="bg-canvas"></canvas>
 
-    <section id="about">
-        <h3>About Merin Xavy</h3>
-        [cite_start]<p>Master's candidate in International Business Administration (ESDES Business School) with a specialization focus on **Financial Risk Management**[cite: 13, 14]. [cite_start]Proven background in Financial Control, Data Governance, and Process Automation[cite: 9, 10, 11]. [cite_start]Graduated First Class with Distinction from Bachelor of Commerce - Finance (GPA 3.7/4.0)[cite: 16]. [cite_start]Eager to secure a role and contribute to Risk Mitigation and financial efficiency[cite: 6].</p>
-        
-        <h4>Certifications:</h4>
-        <ul>
-            [cite_start]<li>Investment Risk Management (Coursera) [cite: 33]</li>
-            [cite_start]<li>Business Analysis & Process Management (Coursera) [cite: 34]</li>
-            [cite_start]<li>Financial Markets Professional Program (Finmark India) [cite: 35]</li>
-        </ul>
-        <h4>Languages:</h4>
-        [cite_start]<p>English (C1), French (A2), Hindi (B1), Malayalam (Native) [cite: 36]</p>
-    </section>
+<header>
+  <div class="brand">
+    <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),rgba(201,163,74,0.6));display:flex;align-items:center;justify-content:center;color:var(--bg);font-weight:800">MX</div>
+    <h1>Merin Xavy</h1>
+  </div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#resume">Resume</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-    <footer>
-        [cite_start]<p>Location: Lyon, France [cite: 2] | [cite_start]Availability: **Full-time from March 2026** [cite: 36]</p>
-        [cite_start]<p>Connect: <a href="https://linkedin.com/in/merin-xavy/" target="_blank">LinkedIn</a> [cite: 2] | [cite_start]<a href="mailto:xavy.merin@gmail.com">xavy.merin@gmail.com</a> [cite: 2]</p>
-    </footer>
+<main>
+  <section class="hero">
+    <div class="hero-grid container">
+      <div class="intro" id="tilt-card">
+        <h2>Merin Xavy</h2>
+        <p class="lead">Financial Analyst · Corporate Controlling · Risk & Compliance</p>
+        <p>Master in Management (M2) — ESDES Business School. I design data-driven finance solutions, build BI dashboards (SQL / Power BI), and implement internal control frameworks that reduce operational risk.</p>
+
+        <div class="meta" style="margin-top:14px">
+          <span class="pill">SQL • Power BI</span>
+          <span class="pill">Advanced Excel</span>
+          <span class="pill">Financial Modeling</span>
+        </div>
+
+        <div class="ctas">
+          <a class="btn primary" href="#resume">Download CV</a>
+          <a class="btn" href="#projects">View Projects</a>
+        </div>
+
+        <div style="margin-top:18px;color:var(--muted);font-size:13px">
+          Availability: Full-time from March 2026
+        </div>
+      </div>
+
+      <aside class="profile" aria-label="profile card">
+        <div style="text-align:center">
+          <!-- YOUR PHOTO or LOGO -->
+          <!-- Your actual photo -->
+<img src="Linkedln.jpg" class="portrait" alt="Merin Xavy Portrait" style="object-fit:cover;">
+
+          <ul style="margin-top:14px">
+            <li><strong style="color:var(--text)">Lyon, France</strong></li>
+            <li style="color:var(--muted)">Email: xavy.merin@gmail.com</li>
+            <li style="color:var(--muted)">LinkedIn: linkedin.com/in/merin-xavy/</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <h2 style="font-family:Playfair Display">About</h2>
+      <p style="color:var(--muted);max-width:900px">
+        I’m focused on corporate controlling, risk mitigation and BI-driven financial reporting. My academic and professional experience includes designing SQL-based dashboards and improving operational latency by up to 25%. (Content sourced from resume.) :contentReference[oaicite:1]{index=1}
+      </p>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="container">
+      <h2 style="font-family:Playfair Display">Selected Projects</h2>
+      <div class="cards" style="margin-top:20px">
+        <article class="card" tabindex="0">
+          <h3>SQL + Power BI Dashboard</h3>
+          <p>Optimized SQL queries and Power BI dashboard that increased reporting efficiency by 20% (Academic project). :contentReference[oaicite:2]{index=2}</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h3>Process Optimization — Inventure Metal</h3>
+          <p>Invoice reconciliation and validation processes reduced processing latency by 25% (Finance & Accounting Intern). :contentReference[oaicite:3]{index=3}</p>
+        </article>
+        <article class="card" tabindex="0">
+          <h3>Algorithmic Risk Simulation</h3>
+          <p>Applied risk controls and reduced settlement discrepancies by 20% (Goldman Sachs Virtual Program). :contentReference[oaicite:4]{index=4}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="resume">
+    <div class="container">
+      <h2 style="font-family:Playfair Display">Resume</h2>
+      <p style="color:var(--muted)">Full resume (PDF) — click to download or view.</p>
+      <div style="margin-top:16px">
+        <a class="btn primary" href="/Financial%20Analyst%20and%20Controller%20Resume_Merin%20Xavy.pdf" target="_blank" rel="noopener">Open Resume (PDF)</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2 style="font-family:Playfair Display">Contact</h2>
+      <p style="color:var(--muted)">Interested in working together? Email me at <strong style="color:var(--text)">xavy.merin@gmail.com</strong> or send a message on LinkedIn.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="yr"></span> Merin Xavy — Built with care & data-driven design
+</footer>
+
+<script>
+/* small helpers */
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* tilt effect for intro card */
+const card = document.getElementById('tilt-card');
+card.addEventListener('mousemove', (e) => {
+  const rect = card.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width;
+  const y = (e.clientY - rect.top) / rect.height;
+  const rotateY = (x - 0.5) * 14; // degrees
+  const rotateX = (0.5 - y) * 10;
+  card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(6px)`;
+  card.style.boxShadow = "0 18px 40px rgba(2,6,23,0.6)";
+});
+card.addEventListener('mouseleave', () => {
+  card.style.transform = 'none';
+  card.style.boxShadow = '';
+});
+
+/* simple focus-visible */
+document.querySelectorAll('.card, .btn, nav a').forEach(el => {
+  el.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ el.click(); } });
+});
+
+/* three.js animated background (floating particles + shapes) */
+(()=> {
+  const canvas = document.getElementById('bg-canvas');
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  let w = innerWidth, h = innerHeight;
+  renderer.setSize(w,h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 2000);
+  camera.position.set(0,0,80);
+
+  // group of floating icosahedrons
+  const group = new THREE.Group();
+  const geo = new THREE.IcosahedronGeometry(3, 1);
+  const mat = new THREE.MeshStandardMaterial({color:0xC9A34A, metalness:0.7, roughness:0.35, transparent:true, opacity:0.95});
+  for(let i=0;i<18;i++){
+    const m = new THREE.Mesh(geo, mat.clone());
+    m.position.set((Math.random()-0.5)*120, (Math.random()-0.5)*80, (Math.random()-0.5)*200);
+    m.rotation.set(Math.random()*2,Math.random()*2,Math.random()*2);
+    m.scale.setScalar(0.8 + Math.random()*1.6);
+    m.material.opacity = 0.12 + Math.random()*0.6;
+    group.add(m);
+  }
+  scene.add(group);
+
+  // soft lights
+  const light = new THREE.DirectionalLight(0xffffff, 0.8);
+  light.position.set(10,20,50);
+  scene.add(light);
+  const amb = new THREE.AmbientLight(0xffffff, 0.12);
+  scene.add(amb);
+
+  // particles
+  const partGeo = new THREE.BufferGeometry();
+  const pts = 600;
+  const positions = new Float32Array(pts * 3);
+  for(let i=0;i<pts;i++){
+    positions[i*3] = (Math.random()-0.5)*500;
+    positions[i*3+1] = (Math.random()-0.5)*300;
+    positions[i*3+2] = (Math.random()-0.5)*800;
+  }
+  partGeo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  const partMat = new THREE.PointsMaterial({size:1.8, color:0xFFFFFF, opacity:0.06, transparent:true});
+  const particles = new THREE.Points(partGeo, partMat);
+  scene.add(particles);
+
+  // resize
+  window.addEventListener('resize', () => {
+    w = innerWidth; h = innerHeight;
+    renderer.setSize(w,h);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+  });
+
+  let t = 0;
+  function anim(){
+    t += 0.005;
+    group.rotation.y += 0.0016;
+    group.children.forEach((m,i) => {
+      m.rotation.x += 0.003 + (i%3)*0.0006;
+      m.position.y += Math.sin(t + i) * 0.01;
+    });
+    particles.rotation.y += 0.0005;
+    camera.position.x = Math.sin(t*0.3)*18;
+    camera.lookAt(0,0,0);
+    renderer.render(scene, camera);
+    requestAnimationFrame(anim);
+  }
+  anim();
+})();
+
+/* smooth scroll for nav */
+document.querySelectorAll('nav a').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+</script>
+
 </body>
 </html>
