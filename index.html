@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Merin Xavy — Financial Analyst Portfolio</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&family=Alice&display=swap" rel="stylesheet">
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -21,6 +21,8 @@
     --highlight: #F1EDE6; /* Off-White/Cream - Card Background */
     --card-shadow: 0 15px 30px rgba(0,0,0,0.06); 
     --transition-speed: 0.4s;
+    /* New Dark Background for Thank You page */
+    --dark-bg: #3A2D28; 
   }
 
   * { box-sizing:border-box; }
@@ -28,7 +30,7 @@
   a { text-decoration:none; }
   img { display:block; max-width:100%; }
 
-  /* --- HEADER STYLES (Based on image_85c1be.png) --- */
+  /* --- HEADER STYLES --- */
   header {
     position:sticky;
     top:0;
@@ -69,34 +71,14 @@
     box-shadow: var(--card-shadow);
     flex: 1 1 50%;
   }
-  .bio-card h2 { 
-    font-family: 'Playfair Display'; 
-    font-size: 32px; 
-    margin-bottom: 4px;
-    color: var(--text);
-  }
-  .bio-card h3 { 
-    font-size: 16px; 
-    font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 20px;
-  }
-  .bio-card p {
-    line-height: 1.6;
-    margin-bottom: 16px;
-    color: var(--text-light);
-  }
-  .bio-card strong {
-    color: var(--gold);
-    font-weight: 600;
-  }
-  .skills-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
-  }
-  .skills-row span {
+  .bio-card h2 { font-family: 'Playfair Display'; font-size: 32px; margin-bottom: 4px; color: var(--text); }
+  .bio-card h3 { font-size: 16px; font-weight: 600; color: var(--text-light); margin-bottom: 20px; }
+  .bio-card p { line-height: 1.6; margin-bottom: 16px; color: var(--text-light); }
+  .bio-card strong { color: var(--gold); font-weight: 600; }
+  
+  /* Badge styling is handled by .pill and .skills-row */
+  .skills-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+  .skills-row span { /* Standard Skills/Pill style */
     background: rgba(203, 173, 141, 0.1); 
     color: var(--text);
     padding: 6px 12px;
@@ -104,43 +86,12 @@
     font-size: 14px;
     font-weight: 500;
   }
-
   /* Buttons */
-  .btn-download {
-    background: var(--gold);
-    color: var(--highlight);
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: 700;
-    transition: var(--transition-speed);
-    box-shadow: 0 4px 15px rgba(203, 173, 141, 0.4);
-  }
-  .btn-download:hover {
-    background: #A48374; 
-    box-shadow: 0 6px 20px rgba(164, 131, 116, 0.6);
-  }
-  .btn-view {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--light-border);
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    margin-left: 15px;
-    transition: var(--transition-speed);
-  }
-  .btn-view:hover {
-    background: var(--highlight);
-    border-color: var(--gold);
-  }
-  .availability-note {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px dashed rgba(203, 173, 141, 0.2);
-  }
+  .btn-download { background: var(--gold); color: var(--highlight); border: none; padding: 12px 20px; border-radius: 8px; font-weight: 700; transition: var(--transition-speed); box-shadow: 0 4px 15px rgba(203, 173, 141, 0.4); }
+  .btn-download:hover { background: #A48374; box-shadow: 0 6px 20px rgba(164, 131, 116, 0.6); }
+  .btn-view { background: transparent; color: var(--text); border: 1px solid var(--light-border); padding: 12px 20px; border-radius: 8px; font-weight: 600; margin-left: 15px; transition: var(--transition-speed); }
+  .btn-view:hover { background: var(--highlight); border-color: var(--gold); }
+  .availability-note { font-size: 13px; color: var(--muted); margin-top: 20px; padding-top: 10px; border-top: 1px dashed rgba(203, 173, 141, 0.2); }
   
   /* --- Reusable Section Styles --- */
   section { padding:72px 24px; max-width:1100px; margin:0 auto; }
@@ -151,49 +102,62 @@
   .t-content h5 { margin:0; color:var(--text); font-size: 18px; }
   .t-content p { color:var(--muted); margin:6px 0 0; font-size: 15px; }
   .t-content ul { color:var(--text-light); padding-left:20px; font-size: 15px; }
-
-  /* Projects */
   .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
   .card { background: var(--highlight); padding:20px; border-radius:18px; box-shadow:var(--card-shadow); transition:0.3s; }
-  .card:hover { transform:translateY(-4px); }
-
-  /* Certifications */
   .cert-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
-  .cert-card {
-    background: var(--highlight);
-    padding:20px;
-    border-radius:18px;
-    box-shadow:var(--card-shadow);
-    display:flex;
-    gap:15px;
-    align-items:center;
-    transition:0.3s;
-    border-left:5px solid var(--gold);
-  }
+  .cert-card { border-left:5px solid var(--gold); background: var(--highlight); padding:20px; border-radius:18px; box-shadow:var(--card-shadow); display:flex; gap:15px; align-items:center; transition:0.3s; }
   .cert-card a { color:var(--gold); font-weight:600; font-size:14px; margin-top:8px; display:inline-block; }
-
-  /* Skills */
   .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
-  .pill { background:rgba(203,173,141,0.1); padding:8px 12px; border-radius:999px; color:var(--text-light); border:1px solid rgba(203,173,141,0.05); font-weight:600; font-size:13px; }
-  .behaviour-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; }
-  .talent-icon { width:60px; height:60px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--highlight); background:linear-gradient(135deg,var(--gold),#A48374); box-shadow:0 8px 20px rgba(203,173,141,0.3); }
-  .talent-card { text-align:center; padding:18px; background:var(--highlight); border-radius:16px; box-shadow:var(--card-shadow); transition:0.3s; }
-
-  footer { padding:48px; text-align:center; color:var(--muted); border-top:1px solid rgba(203,173,141,0.2); }
+  .pill { background:rgba(203, 173, 141, 0.2); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(203,173,141,0.05); font-weight:600; font-size:13px; }
   
+  /* --- THANK YOU PAGE STYLES --- */
+  #thank-you {
+    background: var(--dark-bg);
+    color: var(--highlight);
+    text-align: center;
+    padding: 15vh 24px; /* Vertical centering effect */
+  }
+  #thank-you h4 {
+    font-family: 'Alice', serif;
+    font-size: 40px;
+    color: var(--highlight);
+    margin: 0;
+  }
+  #thank-you p {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    margin-top: 20px;
+    color: var(--gold);
+  }
+
+  /* --- FOOTER STYLES --- */
+  footer { 
+    padding:48px; 
+    text-align:center; 
+    color:var(--muted); 
+    border-top:1px solid rgba(203,173,141,0.2); 
+  }
+  .footer-contact {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-contact a, .footer-contact span {
+    color: var(--text-light);
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  .footer-contact a:hover {
+    color: var(--gold);
+  }
+
   /* Responsive Adjustments */
   @media (max-width: 900px) {
-    .hero-container {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 24px;
-    }
-    .bio-card {
-      flex-basis: auto;
-    }
-    nav {
-      display: none; /* Hide navigation on small screens */
-    }
+    .hero-container { flex-direction: column; align-items: stretch; gap: 24px; }
+    nav { display: none; }
+    #thank-you h4 { font-size: 32px; }
   }
   </style>
 </head>
@@ -212,7 +176,9 @@
       <a href="#education">Education</a>
       <a href="#skills">Skills</a>
       <a href="#certifications">Certifications</a>
-      <a href="#timeline">timeline</a>
+      <a href="#languages">Languages</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#thank-you">Contact</a>
     </nav>
   </header>
 
@@ -224,19 +190,25 @@
         <h2>Merin Xavy</h2>
         <h3>Financial Analyst · Corporate Controlling · Risk & Compliance</h3>
 
-        [cite_start]<p>Seeking international opportunities in financial analysis, treasury, and strategic finance[cite: 5]. [cite_start]Passionate about designing **data-driven finance solutions**, building BI dashboards, and implementing internal control frameworks that reduce operational risk and enhance financial efficiency[cite: 6, 7].</p>
+        <p>Aspiring CFA and International Business Master's candidate focused on strategic financial roles. I specialize in Risk Management and designing data-driven finance solutions (SQL, BI), with a proven record of measurable impact.</p>
 
         <div class="skills-row">
-          <span>SQL</span>
-          <span>Power BI</span>
-          <span>Advanced Excel</span>
-          <span>Financial Modeling</span>
+            <span class="pill">Financial Analysis</span>
+            <span class="pill">Strategic Finance</span>
+            <span class="pill">Corporate Controlling</span>
+            <span class="pill">Risk Management</span>
         </div>
         <div class="skills-row">
-          <span>Risk Management</span>
-          <span>CFA Aspirant</span>
+            <span class="pill">25% Revenue Growth</span>
+            <span class="pill">25% Process Optimization</span>
         </div>
-
+        <div class="skills-row" style="margin-top: 20px;">
+          <span class="pill">SQL</span>
+          <span class="pill">Power BI</span>
+          <span class="pill">Advanced Excel</span>
+          <span class="pill">Financial Modeling</span>
+          <span class="pill">CFA Aspirant</span>
+        </div>
         <div style="margin-top: 30px;">
           <a href="Financial Analyst and Controller Resume_Merin Xavy.pdf" target="_blank" class="btn-download">Download CV (PDF)</a>
           <a href="#projects" class="btn-view">View Projects</a>
@@ -250,7 +222,12 @@
       <div class="bio-card" style="flex: 1 1 35%;">
         
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="Linkedln.jpg" alt="Merin Xavy Professional Portrait" style="width: 180px; height: auto; border-radius: 10px; object-fit: cover; margin: 0 auto; border: 3px solid var(--gold); box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
+          <video id="profile-video" autoplay loop muted playsinline 
+                 style="max-width: 180px; height: auto; border-radius: 10px; object-fit: cover; margin: 0 auto; border: 3px solid var(--gold); box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
+            <source src="untitled_design.mp4" type="video/mp4">
+            <img src="Linkedln.jpg" alt="Merin Xavy Professional Portrait" style="width: 180px; height: auto; border-radius: 10px; object-fit: cover; margin: 0 auto;">
+            Your browser does not support the video tag.
+          </video>
         </div>
 
         <p style="color:var(--text); font-weight: 600; text-align: center;">Contact & Location</p>
@@ -402,6 +379,35 @@
         </div>
       </div>
     </section>
+    <section id="languages">
+      <h4>Language Proficiency</h4>
+      
+      <div class="cert-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        
+        <div class="language-card" style="border-left-color: #3A2D28;">
+            <h5>English 🇬🇧</h5>
+            <p>Aspiring CFA and International Business Master's candidate focused on strategic financial roles. I specialize in Risk Management and designing data-driven finance solutions (SQL, BI), with a proven record of measurable impact.</p>
+            <span class="pill" style="background: rgba(203, 173, 141, 0.4);">Fluent (C1)</span>
+        </div>
+        
+        <div class="language-card" style="border-left-color: #A48374;">
+            <h5>French 🇫🇷</h5>
+            <p>Aspirant CFA et candidat au Master en Administration des Affaires Internationales, axé sur les rôles financiers stratégiques. Je me spécialise en gestion des risques et en conception de solutions financières basées sur les données (SQL, BI), avec un impact mesurable avéré.</p>
+            <span class="pill" style="background: rgba(164, 131, 116, 0.2);">Basic Knowledge (A2)</span>
+        </div>
+        
+        <div class="language-card" style="border-left-color: #3A2D28;">
+            <h5>Hindi 🇮🇳</h5>
+            <span class="pill" style="background: rgba(203, 173, 141, 0.3);">Working Proficiency</span>
+        </div>
+
+        <div class="language-card" style="border-left-color: #A48374;">
+            <h5>Malayalam 🇮🇳</h5>
+            <span class="pill" style="background: rgba(164, 131, 116, 0.3);">Bilingual (Native)</span>
+        </div>
+
+      </div>
+    </section>
 
     <section id="timeline">
       <h4>Chronological Journey</h4>
@@ -413,7 +419,7 @@
       </div>
     </section>
 
- <section id="thank-you">
+    <section id="thank-you">
         <h4>Thank you for your time for learning about me.</h4>
         <p>I look forward to connecting with you about opportunities.</p>
     </section>
@@ -423,10 +429,10 @@
   <footer>
     <p>&copy; 2025 Merin Xavy. All rights reserved.</p>
     <div class="footer-contact">
-        <span> Lyon, France </span>
-        <a href="mailto:xavy.merin@gmail.com">xavy.merin@gmail.com </a>
-        <span> +33 6 03 83 89 03 </span>
-        <a href="https://www.linkedin.com/in/merin-xavy/" target="_blank"> LinkedIn </a>
+        <span>📍 Lyon, France </span>
+        <a href="mailto:xavy.merin@gmail.com">📧 xavy.merin@gmail.com </a>
+        <span>📞 +33 6 03 83 89 03 </span>
+        <a href="https://www.linkedin.com/in/merin-xavy/" target="_blank">🔗 LinkedIn </a>
     </div>
   </footer>
 
