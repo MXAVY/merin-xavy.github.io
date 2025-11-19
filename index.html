@@ -10,21 +10,145 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
+  /* --- NUDE COLOR PALETTE --- */
   :root {
-    --bg: #FAF7F2;
-    --card: rgba(255,255,255,0.12);
-    --text: #1A1A1A;
-    --text-light: #444;
-    --muted: #5B6073;
-    --gold: #D4AF37;
-    --card-shadow: 0 20px 40px rgba(0,0,0,0.12);
-    --highlight: #FFFFFF;
+    --bg: #EBE3DB; /* Very Light Nude */
+    --text: #3A2D28; /* Dark Brown */
+    --text-light: #A48374; /* Muted Brown */
+    --muted: #A48374; /* Muted Brown */
+    --gold: #CBAD8D; /* Mid-tone Nude (Accent color) */
+    --light-border: #D1C7BD; /* Light Nude/Taupe */
+    --highlight: #F1EDE6; /* Off-White/Cream (Card background) */
+    --card-shadow: 0 15px 30px rgba(0,0,0,0.06); 
+    --transition-speed: 0.6s;
   }
 
   * { box-sizing:border-box; }
-  html, body { margin:0; padding:0; font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; background: var(--bg); color:var(--text); scroll-behavior:smooth; }
+  html, body { margin:0; padding:0; font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; background: var(--bg); color:var(--text); scroll-behavior:smooth; overflow-x: hidden; }
   a { text-decoration:none; }
   img { display:block; max-width:100%; }
+
+  /* ---------------------------------
+     1. LANDING PAGE STYLES (STEP 1 & 2)
+     --------------------------------- */
+  .landing-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform var(--transition-speed) ease-in-out;
+    z-index: 999;
+  }
+
+  /* STEP 1: WELCOME SCREEN */
+  #step-one {
+    background-color: var(--muted); 
+    color: var(--highlight);
+    flex-direction: column;
+    padding: 20px;
+  }
+  #step-one h1 { font-family: 'Playfair Display'; font-weight: 600; font-size: clamp(30px, 6vw, 60px); margin-bottom: 0; }
+  #step-one h2 { font-family: 'Inter'; font-weight: 800; font-size: clamp(16px, 3vw, 24px); letter-spacing: 4px; margin-top: 20px; }
+  #step-one p { font-family: 'Inter'; font-weight: 400; font-size: clamp(14px, 2vw, 20px); margin-top: 80px; }
+  .arrow { 
+    width: 40px; height: 40px; cursor: pointer; margin-top: 15px; 
+    transition: transform 0.3s;
+  }
+  .arrow:hover { transform: translateY(5px); }
+
+  /* STEP 2: PROFILE/BIO SCREEN */
+  #step-two {
+    background-color: var(--highlight); 
+    transform: translateY(100%); /* Start hidden below the screen */
+    padding: 40px;
+    z-index: 998; /* Below step-one */
+  }
+  .bio-content {
+    display: flex;
+    align-items: center;
+    max-width: 1000px;
+    width: 90%;
+    background-color: var(--highlight);
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden; /* To handle internal sliding elements */
+  }
+  .bio-image-container, .bio-text-container {
+    padding: 40px;
+    flex: 1;
+    text-align: left;
+    transition: transform var(--transition-speed) ease-out;
+  }
+  .bio-image-container {
+    flex-basis: 40%;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(-100%); /* Start image off-screen left */
+  }
+  .bio-text-container {
+    flex-basis: 60%;
+    transform: translateX(100%); /* Start text off-screen right */
+  }
+  .bio-portrait {
+    width: 100%;
+    max-width: 300px; 
+    height: auto;
+    object-fit: cover;
+    border-radius: 0 0 20px 0; /* Optional: subtle rounding */
+  }
+  .bio-text-container h3 { font-family: "Playfair Display"; font-size: 30px; color: var(--text); margin-bottom: 10px; }
+  .bio-text-container p { color: var(--text-light); line-height: 1.7; margin-bottom: 20px; }
+  .bio-text-container strong { color: var(--gold); }
+  .bio-contact p { font-size: 15px; margin: 4px 0; color: var(--muted); }
+
+
+  /* STATE: AFTER TRANSITION (STEP 2 IS VISIBLE) */
+  body.step-two-active #step-one {
+    transform: translateY(-100%); /* Slide step 1 up */
+  }
+  body.step-two-active #step-two {
+    transform: translateY(0); /* Slide step 2 down into view */
+  }
+  /* Slide in the internal elements */
+  body.step-two-active .bio-image-container {
+    transform: translateX(0);
+  }
+  body.step-two-active .bio-text-container {
+    transform: translateX(0);
+  }
+
+  @media (max-width: 800px) {
+    .bio-content { flex-direction: column; width: 95%; max-width: 500px; }
+    .bio-image-container, .bio-text-container { padding: 20px; flex-basis: auto; }
+    .bio-image-container { 
+        order: -1; 
+        border-radius: 20px 20px 0 0; 
+    }
+    .bio-portrait { max-width: 200px; border-radius: 10px; }
+  }
+
+
+  /* ---------------------------------
+     2. STANDARD WEBSITE STYLES 
+     --------------------------------- */
+  main {
+    padding-top: 100px; /* Space for fixed header */
+    transform: translateY(100vh); /* Start off-screen */
+    transition: transform var(--transition-speed) ease-in-out;
+    background: var(--bg);
+  }
+  body.step-two-active main {
+    transform: translateY(0); /* Move content up */
+    padding-top: 0; /* Remove header padding since we're using a sticky header */
+  }
 
   header {
     position:sticky;
@@ -34,98 +158,84 @@
     justify-content:space-between;
     align-items:center;
     padding:24px clamp(16px,4vw,48px);
-    background:rgba(250,247,242,0.95);
+    background:rgba(235,227,219,0.95);
     backdrop-filter: blur(12px);
-    border-bottom:1px solid rgba(212,175,55,0.12);
+    border-bottom:1px solid rgba(203,173,141,0.2);
+    /* Hide header initially */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease 0.6s;
   }
+  body.step-two-active header {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Standard element styling (reused from previous iteration) */
   .brand { display:flex; align-items:center; gap:12px; }
   .brand h1 { margin:0; font-family:"Playfair Display"; font-weight:800; font-size:20px; color:var(--text); }
   nav a { color:var(--muted); margin-left:20px; font-weight:600; transition:0.3s; }
   nav a:hover { color:var(--gold); }
-
-  /* Hero Section */
-  .hero { min-height:80vh; display:flex; align-items:center; justify-content:center; padding:48px 24px; position:relative; }
-  .hero-grid {
-    display:grid;
-    grid-template-columns: 1fr 420px;
-    gap:32px;
-    max-width:1100px;
-    width:100%;
-    align-items:start;
-  }
-  .intro, .profile {
-    background: var(--highlight);
-    border-radius:20px;
-    padding:28px;
-    box-shadow:var(--card-shadow);
-  }
-  .intro h2 { font-family:"Playfair Display"; font-size:34px; margin-bottom:6px; }
-  .intro p.lead { color:var(--muted); margin:6px 0 18px; font-size:15px; }
-  .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
-  .pill { background:var(--card); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(255,255,255,0.02); font-weight:600; font-size:13px; }
-  .ctas { display:flex; flex-wrap:wrap; gap:14px; margin-top:20px; }
-  .btn { background:transparent; color:var(--text); border:2px solid rgba(0,0,0,0.06); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:700; transition:0.3s; }
-  .btn:hover { background:rgba(212,175,55,0.08); }
-  .btn.primary { background:linear-gradient(90deg,var(--gold),rgba(201,163,74,0.85)); color:var(--bg); border:none; box-shadow:0 8px 30px rgba(201,163,74,0.12); }
-
-  .profile { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; height:420px; border:1px solid rgba(212,175,55,0.06); }
-  .portrait { width:180px; height:180px; border-radius:20px; object-fit:cover; transform-style:preserve-3d; transition: transform 0.4s ease, box-shadow 0.4s ease; border:3px solid rgba(212,175,55,0.4); box-shadow:0 10px 25px rgba(0,0,0,0.15),0 0 25px rgba(212,175,55,0.25); }
-
-  /* Sections */
   section { padding:72px 24px; max-width:1100px; margin:0 auto; }
-  h3 { font-family:"Playfair Display"; font-size:28px; margin-bottom:24px; }
-  p { line-height:1.6; margin-bottom:16px; color:var(--text-light); }
-
-  /* Projects */
+  h3 { font-family:"Playfair Display"; font-size:28px; margin-bottom:24px; color:var(--text); }
+  .timeline { border-left:2px solid rgba(203,173,141,0.4); padding-left:20px; margin-top:24px; }
+  .t-dot { width:14px; height:14px; background:var(--gold); border-radius:50%; position:absolute; left:-29px; top:4px; box-shadow:0 4px 10px rgba(203,173,141,0.4); }
+  footer { padding:48px; text-align:center; color:var(--muted); border-top:1px solid rgba(203,173,141,0.2); }
+  .pill { background:rgba(203,173,141,0.1); padding:8px 12px; border-radius:999px; color:var(--text-light); border:1px solid rgba(203,173,141,0.05); font-weight:600; font-size:13px; }
+  .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
+  .ctas { display:flex; flex-wrap:wrap; gap:14px; margin-top:20px; }
+  .btn { background:transparent; color:var(--text); border:2px solid rgba(58,45,40,0.1); padding:12px 18px; border-radius:10px; cursor:pointer; font-weight:700; transition:0.3s; }
+  .btn.primary { background:linear-gradient(90deg,var(--gold),#a48374); color:var(--highlight); border:none; box-shadow:0 8px 30px rgba(203,173,141,0.2); }
   .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
   .card { background: var(--highlight); padding:20px; border-radius:18px; box-shadow:var(--card-shadow); transition:0.3s; }
   .card:hover { transform:translateY(-4px); }
-
-  /* Timeline */
-  .timeline { border-left:2px solid rgba(201,163,74,0.3); padding-left:20px; margin-top:24px; }
-  .t-item { margin-bottom:30px; position:relative; }
-  .t-dot { width:14px; height:14px; background:var(--gold); border-radius:50%; position:absolute; left:-29px; top:4px; box-shadow:0 4px 10px rgba(201,163,74,0.3); }
-  .t-content h4 { margin:0; color:var(--text); }
-  .t-content p { color:var(--muted); margin:6px 0 0; }
-
-  /* Certifications */
-  .cert-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
-  .cert-card {
-    background: var(--highlight);
-    padding:20px;
-    border-radius:18px;
-    box-shadow:var(--card-shadow);
-    display:flex;
-    gap:15px;
-    align-items:center;
-    transition:0.3s;
-    border-left:5px solid var(--gold);
-  }
-  .cert-card:hover { transform:translateY(-4px); box-shadow:0 24px 48px rgba(0,0,0,0.15); }
-  .cert-card a { color:var(--gold); font-weight:600; font-size:14px; margin-top:8px; display:inline-block; }
-  .cert-icon { width:48px; height:48px; flex-shrink:0; }
-
-  /* Radar Chart */
-  #radar canvas { width:100%; max-width:540px; height:auto; }
-
-  /* Behaviour Analysis */
-  .behaviour-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; }
-  .talent-icon { width:60px; height:60px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--bg); background:linear-gradient(135deg,var(--gold),rgba(201,163,74,0.5)); box-shadow:0 8px 20px rgba(201,163,74,0.25); transition: transform 0.3s, box-shadow 0.3s; }
+  .talent-icon { width:60px; height:60px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--highlight); background:linear-gradient(135deg,var(--gold),#A48374); box-shadow:0 8px 20px rgba(203,173,141,0.3); transition: transform 0.3s, box-shadow 0.3s; }
   .talent-card { text-align:center; padding:18px; background:var(--highlight); border-radius:16px; box-shadow:var(--card-shadow); transition:0.3s; }
-  .talent-card:hover { transform:translateY(-4px); }
 
-  @media (max-width:960px) { .hero-grid { grid-template-columns:1fr; gap:24px; } .profile { height:320px; } }
   </style>
 </head>
 
 <body>
+  
+  <div id="step-one" class="landing-page">
+    <h1>Hello and welcome!</h1>
+    <h2>TO MY PROFESSIONAL PROFILE</h2>
+    <p>Want to Know More about me</p>
+    <img src="arrow_down.png" alt="Click to enter" class="arrow" id="enter-profile">
+  </div>
+
+  <div id="step-two" class="landing-page">
+    <div class="bio-content">
+      
+      <div class="bio-image-container" id="bio-image-area">
+        <img src="2.jpg" alt="Merin Xavy Professional Portrait" class="bio-portrait">
+      </div>
+
+      <div class="bio-text-container" id="bio-text-area">
+        <h3>Merin Xavy</h3>
+        <p style="color:var(--text); font-weight:600; font-size:16px;">Financial Analyst · Strategist · CFA Aspirant</p>
+
+        <p>A dynamic **Financial Analyst** and strategist, I specialize in **Risk Management** and **Business Strategy** within the international financial sector. I leverage key tools like **SQL, Power BI, and Advanced Financial Modeling** to transform complex data into actionable strategic insights. My capability is proven by a notable achievement: **increasing revenue collections by 25%** through process optimization.</p>
+
+        <hr style="border-top:1px solid var(--light-border); margin:25px 0;">
+
+        <p>I'm Merin Xavy, currently pursuing a Master's degree with a focus on international business and corporate controlling. I'm continually enhancing my expertise and am **open to embracing internships or full-time positions** where I can apply my analytical acumen to high-impact roles. If you’re interested in learning more or discussing potential collaborations, don’t hesitate to reach out!</p>
+        
+        <div class="bio-contact">
+          [cite_start]<p>Email: xavy.merin@gmail.com [cite: 2]</p>
+          [cite_start]<p>Location: Lyon, France [cite: 2]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <header>
     <div class="brand">
-      <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),rgba(201,163,74,0.6));display:flex;align-items:center;justify-content:center;color:var(--bg);font-weight:800">MX</div>
+      <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#A48374);display:flex;align-items:center;justify-content:center;color:var(--highlight);font-weight:800">MX</div>
       <h1>Merin Xavy</h1>
     </div>
     <nav>
-      <a href="#about">About</a>
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#education">Education</a>
@@ -135,40 +245,23 @@
     </nav>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="intro">
-          <h2>Merin Xavy</h2>
-          <p class="lead">Financial Analyst · Corporate Controlling · Risk & Compliance</p>
-          [cite_start]<p>Seeking international opportunities in financial analysis, treasury, and strategic finance[cite: 5]. [cite_start]Passionate about designing **data-driven finance solutions**, building BI dashboards, and implementing internal control frameworks that reduce operational risk and enhance financial efficiency[cite: 7].</p>
-          <div class="meta">
+  <main id="main-content">
+    
+    <section id="about" style="padding-top:100px;">
+        <h3>My Focus and Expertise</h3>
+        [cite_start]<p>Seeking international opportunities in financial analysis, treasury, and strategic finance[cite: 5]. [cite_start]I am a Finance-focused Master's student with global experience in financial analysis, ESG reporting, and risk management[cite: 6]. [cite_start]I am skilled in aligning strategic decision-making with sustainable financial goals[cite: 7].</p>
+        <div class="meta">
             <span class="pill">SQL</span>
             <span class="pill">Power BI</span>
             <span class="pill">Advanced Excel</span>
             <span class="pill">Financial Modeling</span>
             <span class="pill">Risk Management</span>
             <span class="pill">CFA Aspirant</span>
-          </div>
-          <div class="ctas">
+        </div>
+        <div class="ctas" style="margin-top: 30px;">
             <a class="btn primary" href="Merin_Xavy_Financial Analyst_CV_2025.pdf" target="_blank" rel="noopener">Download CV (PDF)</a>
             <a class="btn" href="#projects">View Projects</a>
-          </div>
-          <div style="margin-top:18px;color:var(--muted);font-size:13px">
-            [cite_start]Availability: Full-time from **March 2026** for compulsory internship [cite: 5] | [cite_start]Languages: English (Fluent) [cite: 54][cite_start], French (Basic) [cite: 58]
-          </div>
         </div>
-
-        <aside class="profile">
-          <img src="Linkedln.jpg" alt="Merin Xavy" class="portrait">
-          <ul style="margin-top:14px; text-align:center; list-style:none; padding:0;">
-            [cite_start]<li><strong>Lyon, France</strong> [cite: 2]</li>
-            [cite_start]<li>Email: xavy.merin@gmail.com [cite: 2]</li>
-            [cite_start]<li>LinkedIn: linkedin.com/in/merin-xavy/ [cite: 3]</li>
-            [cite_start]<li>Phone: +33 6 03 83 89 03 [cite: 2]</li>
-          </ul>
-        </aside>
-      </div>
     </section>
 
     <section id="experience">
@@ -177,24 +270,23 @@
             <div class="t-item">
                 <div class="t-dot"></div>
                 <div class="t-content">
-                    <h4>Retail Finance Assistant <span style="font-weight:400; color:var(--muted)">| Milan Stores, Thrissur, India</span></h4>
-                    [cite_start]<p>Apr 2021 - Aug 2024 (Apprenticeship) [cite: 10, 11]</p>
+                    <h4>Retail Finance Assistant <span style="font-weight:400; color:var(--muted)">| [cite_start]Milan Stores, Thrissur, India</span> [cite: 9, 11]</h4>
+                    [cite_start]<p>Apr 2021 - Aug 2024 (Apprenticeship) [cite: 10]</p>
                     <ul style="color:var(--text-light); padding-left:20px;">
                         [cite_start]<li>Supported budgeting and forecasting by analyzing financial data and cost-saving opportunities[cite: 12].</li>
                         [cite_start]<li>**Boosted monthly revenue collections by 25%** through improved payment tracking[cite: 16].</li>
                         [cite_start]<li>Maintained accurate records of sales, expenses, and inventory to aid decision-making[cite: 13].</li>
-                        [cite_start]<li>Tracked revenue trends with the sales team to drive business growth[cite: 14].</li>
                     </ul>
                 </div>
             </div>
             <div class="t-item">
                 <div class="t-dot"></div>
                 <div class="t-content">
-                    <h4>Finance & Accounting Intern <span style="font-weight:400; color:var(--muted)">| Inventure Metal Products, Dubai, UAE</span></h4>
-                    [cite_start]<p>Apr 2024 (Internship) [cite: 18, 19]</p>
+                    <h4>Finance & Accounting Intern <span style="font-weight:400; color:var(--muted)">| [cite_start]Inventure Metal Products, Dubai, UAE</span> [cite: 17, 19]</h4>
+                    [cite_start]<p>Apr 2024 (Internship) [cite: 18]</p>
                     <ul style="color:var(--text-light); padding-left:20px;">
                         [cite_start]<li>**Reduced invoice processing time by 25%** through efficient data entry and reconciliation[cite: 23].</li>
-                        [cite_start]<li>Processed invoices, reconciled accounts, and assisted in preparing financial reports[cite: 20].</li>
+                        [cite_start]<li>Processed invoices, reconciled accounts, and ensured accurate financial records[cite: 20].</li>
                         [cite_start]<li>Conducted journal entry adjustments to maintain the integrity of financial statements[cite: 21].</li>
                     </ul>
                 </div>
@@ -207,19 +299,19 @@
       <div class="projects-grid">
         <div class="card">
           <h4>SQL-Based BI Dashboard</h4>
-          [cite_start]<p>Developed SQL-based BI dashboards, enhancing real-time financial insights and **improved reporting efficiency by 20%**[cite: 50].</p>
+          [cite_start]<p>Improved reporting efficiency by **20%** [cite: 50] [cite_start]through financial systems analysis, developing SQL-based BI dashboards[cite: 50].</p>
         </div>
         <div class="card">
           <h4>Goldman Sachs Operations Simulation</h4>
-          [cite_start]<p>Simulated trade settlements, ensuring compliance, and **reduced settlement discrepancies by 20%** through process optimization[cite: 46, 47].</p>
+          [cite_start]<p>Simulated trade settlements, ensuring compliance, and **reduced settlement discrepancies by 20%**[cite: 46, 47].</p>
         </div>
         <div class="card">
           <h4>Investment Strategy Capstone</h4>
-          [cite_start]<p>Analyzed financial markets and developed investment strategies using Excel and financial modeling for Capstone Project[cite: 28].</p>
+          [cite_start]<p>Analyzed financial markets and developed investment strategies using Excel and financial modeling[cite: 28].</p>
         </div>
       </div>
     </section>
-    
+
     <section id="education">
         <h3>Education</h3>
         <div class="timeline">
@@ -228,14 +320,14 @@
                 <div class="t-content">
                     <h4>Master in Management, International Business Administration</h4>
                     [cite_start]<p>ESDES Business School, Catholic University of Lyon, France (Sep 2024 - Current) [cite: 25, 26]</p>
-                    [cite_start]<p style="font-size:14px; margin-bottom:8px;">**Relevant Coursework:** International Corporate Finance, Financial Analysis, Risk Management, Digital Transformation, Corporate Governance, Data Management[cite: 27].</p>
+                    [cite_start]<p style="font-size:14px; margin-bottom:8px;">**Relevant Coursework:** International Corporate Finance, Financial Analysis, Risk Management, Corporate Governance, Data Management[cite: 27].</p>
                     <a href="[LINK_TO_MASTER_TRANSCRIPT]" target="_blank" class="btn" style="padding:8px 12px; font-size:14px;">View Transcripts (Link Placeholder)</a>
                 </div>
             </div>
             <div class="t-item">
                 <div class="t-dot"></div>
                 <div class="t-content">
-                    <h4>Bachelor of Commerce, Finance (First Class with Distinction - GPA: 3.7/4.0)</h4>
+                    [cite_start]<h4>Bachelor of Commerce, Finance (First Class with Distinction - GPA: 3.7/4.0) [cite: 29, 30]</h4>
                     [cite_start]<p>Christ College Autonomous, Irinjalakuda, India (Jul 2021 - Apr 2024) [cite: 29, 30]</p>
                     [cite_start]<p style="font-size:14px; margin-bottom:8px;">**Leadership:** Senior Women's Council Leader, AICUF (2023-24) – led campus sustainability initiatives[cite: 31].</p>
                     <a href="[LINK_TO_BACHELOR_TRANSCRIPT]" target="_blank" class="btn" style="padding:8px 12px; font-size:14px;">View Transcripts (Link Placeholder)</a>
@@ -243,7 +335,7 @@
             </div>
         </div>
     </section>
-
+    
     <section id="skills">
       <h3>Skills & Expertise</h3>
       <div id="radar">
@@ -252,14 +344,14 @@
       <div style="margin-top:40px;">
         <h4 style="font-family:'Inter'; margin-bottom:15px; color:var(--text);">Core Proficiencies:</h4>
         <div class="meta">
-            [cite_start]<span class="pill">Financial Modeling & Forecasting [cite: 38]</span>
-            [cite_start]<span class="pill">Investment & Risk Analysis [cite: 38]</span>
-            [cite_start]<span class="pill">Data Analysis & Reporting [cite: 38]</span>
-            [cite_start]<span class="pill">Strategic Planning [cite: 39]</span>
-            [cite_start]<span class="pill">Compliance & Risk Management [cite: 39]</span>
-            [cite_start]<span class="pill">Inventory & Workflow Optimization [cite: 39]</span>
-            [cite_start]<span class="pill">Cross-functional Collaboration [cite: 43]</span>
-            [cite_start]<span class="pill">SQL / Advanced Excel [cite: 36, 38]</span>
+            [cite_start]<span class="pill">Financial Modeling & Forecasting</span> [cite: 38]
+            [cite_start]<span class="pill">Investment & Risk Analysis</span> [cite: 38]
+            [cite_start]<span class="pill">Data Analysis & Reporting</span> [cite: 38]
+            [cite_start]<span class="pill">Strategic Planning</span> [cite: 39]
+            [cite_start]<span class="pill">Compliance & Risk Management</span> [cite: 39]
+            [cite_start]<span class="pill">Inventory & Workflow Optimization</span> [cite: 39]
+            [cite_start]<span class="pill">Cross-functional Collaboration</span> [cite: 47]
+            [cite_start]<span class="pill">Advanced Excel</span> [cite: 36]
         </div>
       </div>
     </section>
@@ -283,15 +375,15 @@
             </div>
             <div class="cert-card">
                 <div class="cert-info">
-                    <h4>Sustainable Business Practices</h4>
-                    <p style="font-size:14px; margin:4px 0 0; color:var(--muted);">CPD Certified | [cite_start]Alison [cite: 59]</p>
+                    <h4>Professional Refresher: Cryptocurrencies</h4>
+                    [cite_start]<p style="font-size:14px; margin:4px 0 0; color:var(--muted);">The CISI [cite: 63]</p>
                     <a href="[LINK_TO_CERTIFICATE]" target="_blank" rel="noopener">View Certificate</a>
                 </div>
             </div>
-            <div class="cert-card">
+             <div class="cert-card">
                 <div class="cert-info">
-                    <h4>Professional Refresher: Cryptocurrencies</h4>
-                    [cite_start]<p style="font-size:14px; margin:4px 0 0; color:var(--muted);">The CISI [cite: 63]</p>
+                    <h4>Financial Markets Professional Program</h4>
+                    [cite_start]<p style="font-size:14px; margin:4px 0 0; color:var(--muted);">Finmark Trainers India [cite: 61]</p>
                     <a href="[LINK_TO_CERTIFICATE]" target="_blank" rel="noopener">View Certificate</a>
                 </div>
             </div>
@@ -302,10 +394,10 @@
                     <a href="[LINK_TO_CERTIFICATE]" target="_blank" rel="noopener">View Certificate</a>
                 </div>
             </div>
-             <div class="cert-card">
+            <div class="cert-card">
                 <div class="cert-info">
-                    <h4>Financial Markets Professional Program</h4>
-                    [cite_start]<p style="font-size:14px; margin:4px 0 0; color:var(--muted);">Finmark Trainers India [cite: 61]</p>
+                    <h4>Sustainable Business Practices</h4>
+                    <p style="font-size:14px; margin:4px 0 0; color:var(--muted);">CPD Certified | [cite_start]Alison [cite: 59]</p>
                     <a href="[LINK_TO_CERTIFICATE]" target="_blank" rel="noopener">View Certificate</a>
                 </div>
             </div>
@@ -318,22 +410,22 @@
         <div class="talent-card">
           <div class="talent-icon">🤝</div>
           <h4>Collaboration</h4>
-          [cite_start]<p>Skilled in cross-functional collaboration (Goldman Sachs Sim.)[cite: 47, 43].</p>
+          [cite_start]<p>Skilled in cross-functional collaboration and stakeholder engagement[cite: 43].</p>
         </div>
         <div class="talent-card">
           <div class="talent-icon">✨</div>
           <h4>Attention to Detail</h4>
-          [cite_start]<p>Ensures integrity of financial statements and accurate data entry[cite: 21, 45].</p>
+          [cite_start]<p>Ensures integrity of financial statements and compliance protocols[cite: 21, 46].</p>
         </div>
         <div class="talent-card">
           <div class="talent-icon">🌱</div>
           <h4>Sustainability Focus</h4>
-          [cite_start]<p>Led campus sustainability initiatives (AICUF Leader)[cite: 31].</p>
+          [cite_start]<p>Led campus sustainability initiatives as Women's Council Leader[cite: 31].</p>
         </div>
         <div class="talent-card">
           <div class="talent-icon">📈</div>
           <h4>Proactive Problem-Solving</h4>
-          [cite_start]<p>Drives growth and optimizes processes (25% revenue/processing time boost)[cite: 16, 23, 45].</p>
+          [cite_start]<p>Drives growth and optimizes processes[cite: 45].</p>
         </div>
       </div>
     </section>
@@ -341,12 +433,10 @@
     <section id="timeline">
       <h3>Chronological Journey</h3>
       <div class="timeline">
-        <div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Aug 2026 (Expected)</h4><p>Thesis Presentation for Master's Graduation.</p></div></div>
-        <div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Mar 2026 (Starting)</h4><p>**Compulsory Internship** begins for Master's degree.</p></div></div>
-        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Sep 2024 – Feb 2026</h4><p>Masters in Management, ESDES Business School, Lyon, France[cite: 25].</p></div></div>
-        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Apr 2024</h4><p>Finance & Accounting Internship, Inventure Metal Products, Dubai, UAE[cite: 18].</p></div></div>
-        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Jul 2021 – Apr 2024</h4><p>Bachelor of Commerce – Finance, Christ College (Autonomous), Kerala, India[cite: 29].</p></div></div>
-        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Apr 2021 – Aug 2024</h4><p>Retail Finance Assistant Apprenticeship, Milan Stores, India[cite: 10].</p></div></div>
+        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Sep 2024 – Current</h4><p>Masters in Management, ESDES Business School, Lyon, France [cite: 25, 26]</p></div></div>
+        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Apr 2024</h4><p>Finance & Accounting Internship, Inventure Metal Products, Dubai, UAE [cite: 17, 19]</p></div></div>
+        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Jul 2021 – Apr 2024</h4><p>Bachelor of Commerce – Finance, Christ College (Autonomous), India [cite: 29, 30]</p></div></div>
+        [cite_start]<div class="t-item"><div class="t-dot"></div><div class="t-content"><h4>Apr 2021 – Aug 2024</h4><p>Retail Finance Assistant Apprenticeship, Milan Stores, India [cite: 9, 11]</p></div></div>
       </div>
     </section>
 
@@ -364,66 +454,60 @@
   </footer>
 
   <script>
-    // 3D Profile Tilt
-    const profile = document.querySelector('.portrait');
-    profile.addEventListener('mousemove', (e) => {
-      const rect = profile.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      const rotateY = (x - 0.5) * 16;
-      const rotateX = (0.5 - y) * 16;
-      profile.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.06)`;
-      profile.style.boxShadow = `0 20px 50px rgba(0,0,0,0.2), 0 0 40px rgba(212,175,55,0.4)`;
-    });
-    profile.addEventListener('mouseleave', () => {
-      profile.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
-      profile.style.boxShadow = "0 10px 25px rgba(0,0,0,0.15), 0 0 25px rgba(212,175,55,0.25)";
-    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const enterProfileButton = document.getElementById('enter-profile');
+      const body = document.body;
+      const stepOne = document.getElementById('step-one');
+      const stepTwo = document.getElementById('step-two');
+      const mainContent = document.getElementById('main-content');
+      
+      const bioImageArea = document.getElementById('bio-image-area');
+      const bioTextArea = document.getElementById('bio-text-area');
 
-    // Radar Chart - Data is illustrative; you should customize these values
-    const ctx = document.getElementById('radarChart').getContext('2d');
-    const radarChart = new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels: ['Financial Modeling', 'Data Analysis', 'Risk Management', 'Compliance/Governance', 'Excel/BI Tools', 'Strategic Planning'],
-        datasets: [{
-          label: 'Skill Level',
-          data: [85, 90, 80, 75, 95, 80],
-          backgroundColor: 'rgba(212,175,55,0.2)',
-          borderColor: 'rgba(212,175,55,1)',
-          borderWidth: 2,
-          pointBackgroundColor: 'rgba(212,175,55,1)',
-        }]
-      },
-      options: {
-        scales: {
-          r: { 
-            beginAtZero:true, 
-            min:0, 
-            max:100, 
-            ticks:{ stepSize:20, color:'#1A1A1A', backdropColor: 'var(--highlight)' },
-            grid: { color: 'rgba(0,0,0,0.1)' },
-            pointLabels: { font: { size: 14, weight: '600' }, color: 'var(--text)' }
-          }
-        },
-        plugins: { legend:{ display:false } },
-        responsive:true,
-        maintainAspectRatio:false,
-        layout: { padding: 10 }
-      }
-    });
+      enterProfileButton.addEventListener('click', () => {
+        // Step 1: Trigger the vertical slide transition for the landing page divs
+        stepOne.style.transform = 'translateY(-100%)';
+        stepTwo.style.transform = 'translateY(0)';
 
-    // Behaviour Icons Hover
-    const talentCards = document.querySelectorAll('.talent-card');
-    talentCards.forEach(card => {
-      const icon = card.querySelector('.talent-icon');
-      card.addEventListener('mouseenter', () => {
-        icon.style.transform = "scale(1.2) translateZ(10px)";
-        icon.style.boxShadow = "0 12px 28px rgba(201,163,74,0.35)";
+        // Step 2: After the first transition, trigger the side slides for image/text
+        setTimeout(() => {
+          body.classList.add('step-two-active');
+          mainContent.style.transform = 'translateY(0)'; // Bring main content up
+        }, 10); // Small delay to ensure CSS transitions are ready
+        
       });
-      card.addEventListener('mouseleave', () => {
-        icon.style.transform = "scale(1) translateZ(0)";
-        icon.style.boxShadow = "0 8px 20px rgba(201,163,74,0.25)";
+      
+      // Radar Chart initialization (reused from previous iteration)
+      const ctx = document.getElementById('radarChart').getContext('2d');
+      const radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['Financial Modeling', 'Data Analysis', 'Risk Management', 'Compliance/Governance', 'Excel/BI Tools', 'Strategic Planning'],
+          datasets: [{
+            label: 'Skill Level',
+            data: [85, 90, 80, 75, 95, 80],
+            backgroundColor: 'rgba(203,173,141,0.2)',
+            borderColor: 'rgba(203,173,141,1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(203,173,141,1)',
+          }]
+        },
+        options: {
+          scales: {
+            r: { 
+              beginAtZero:true, 
+              min:0, 
+              max:100, 
+              ticks:{ stepSize:20, color: 'var(--text)', backdropColor: 'var(--highlight)' },
+              grid: { color: 'rgba(58,45,40,0.1)' },
+              pointLabels: { font: { size: 14, weight: '600' }, color: 'var(--text)' }
+            }
+          },
+          plugins: { legend:{ display:false } },
+          responsive:true,
+          maintainAspectRatio:false,
+          layout: { padding: 10 }
+        }
       });
     });
   </script>
