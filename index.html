@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Merin Xavy — Financial Analyst Portfolio</title>
 
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;800&family=Alice&display=swap" rel="stylesheet">
   
+  <!-- Chart.js for Skills Section -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -25,6 +27,75 @@
     --dark-bg: #3A2D28; 
   }
 
+  /* Pre-loading state - disable body scroll */
+  body.no-scroll { overflow: hidden; }
+
+  /* --- SPLASH SCREEN STYLES --- */
+  #splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg); /* Nude background */
+    z-index: 1000; /* Ensure it covers everything */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+  }
+  
+  /* Text styles matching the reference image */
+  .splash-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 6vw, 60px);
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .splash-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(16px, 3vw, 24px);
+    font-weight: 600;
+    color: var(--text-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 80px;
+  }
+  
+  /* CTA/Arrow styles */
+  .splash-cta {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    color: var(--text-light);
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    transition: color 0.3s;
+    /* Use Alice font for the CTA text to match the elegant feel of the sample image */
+    font-family: 'Alice', serif;
+  }
+  .splash-cta:hover { color: var(--gold); }
+  .arrow-down {
+    width: 30px;
+    height: 30px;
+    fill: var(--text-light);
+    transition: fill 0.3s;
+    animation: bounce 2s infinite;
+  }
+  .splash-cta:hover .arrow-down { fill: var(--gold); }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
+
+  /* --- BASE STYLES --- */
   * { box-sizing:border-box; }
   html, body { margin:0; padding:0; font-family:Inter, system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial; background: var(--bg); color:var(--text); scroll-behavior:smooth; overflow-x: hidden; }
   a { text-decoration:none; }
@@ -45,39 +116,120 @@
   .brand { display:flex; align-items:center; gap:12px; }
   .brand .logo-box {
     width:40px;height:40px;border-radius:8px;
-    background:linear-gradient(135deg,var(--gold),#A48374);
+    background:var(--gold);
     display:flex;align-items:center;justify-content:center;
     color:var(--highlight);font-weight:800;
     font-size: 14px;
+    /* Updated logo styling to use the uploaded image_93f7e7.png via CSS background */
+    background-image: url('image_93f7e7.png'); 
+    background-size: cover;
+    background-position: center;
   }
   .brand h1 { margin:0; font-family:"Playfair Display"; font-weight:800; font-size:20px; color:var(--text); }
   nav a { color:var(--muted); margin-left:20px; font-weight:600; transition:0.3s; }
   nav a:hover { color:var(--gold); }
 
-  /* --- HERO/BIO SECTION (Two-Card Layout) --- */
+  /* --- ANIMATIONS --- */
+  @keyframes slideInFromLeft {
+    0% { transform: translateX(-100px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  
+  /* --- HERO SECTION (Updated for 40:60 ratio and clean photo) --- */
   .hero-container {
     padding: 72px 24px;
-    max-width: 1100px;
+    max-width: 1200px; 
     margin: 0 auto;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    gap: 32px;
+    align-items: flex-start; 
+    gap: 40px; 
   }
+  
+  /* Image Container - Now takes up ~40% of the available space */
+  .profile-photo-wrapper {
+    flex: 0 0 40%; /* Flex-grow 0, flex-shrink 0, basis 40% */
+    max-width: 400px; /* Cap the max width */
+    margin-top: 30px; 
+
+    /* Apply animation */
+    animation: slideInFromLeft 1s ease-out forwards;
+    opacity: 0; 
+    animation-delay: 0.1s;
+    
+    /* Removed rounded corners and border */
+    border-radius: 0; 
+    overflow: visible; 
+  }
+
+  /* Profile Picture - Set to fill the wrapper and maintain size */
+  .profile-image {
+    width: 100%;
+    /* Max height to ensure it doesn't stretch too tall on vertical screens */
+    max-height: 450px; 
+    object-fit: contain; /* Contain to show the whole image */
+    display: block;
+    /* Optional: Subtle shadow to make it pop off the background without a border */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+  }
+  
+  /* The main bio card - Now takes up ~60% of the available space */
   .bio-card {
+    flex: 1 1 60%; /* Flex-grow 1, flex-shrink 1, basis 60% (will take up remaining space) */
     background: var(--highlight);
-    border-radius: 16px;
-    padding: 30px;
+    border-radius: 20px;
+    padding: 40px;
     box-shadow: var(--card-shadow);
-    flex: 1 1 50%;
+    max-width: 800px;
+    text-align: left; 
+    
+    /* Apply animation to the card */
+    animation: slideInFromLeft 1s ease-out forwards;
+    opacity: 0; 
+    animation-delay: 0.3s;
   }
-  .bio-card h2 { font-family: 'Playfair Display'; font-size: 32px; margin-bottom: 4px; color: var(--text); }
-  .bio-card h3 { font-size: 16px; font-weight: 600; color: var(--text-light); margin-bottom: 20px; }
-  .bio-card p { line-height: 1.6; margin-bottom: 16px; color: var(--text-light); }
+  
+  .bio-card h2 { 
+    font-family: 'Playfair Display'; 
+    font-size: clamp(32px, 4vw, 44px); 
+    margin-bottom: 4px; 
+    color: var(--text); 
+  }
+  .bio-card h3 { 
+    font-size: clamp(16px, 2vw, 20px); 
+    font-weight: 600; 
+    color: var(--text-light); 
+    margin-bottom: 30px; 
+  }
+  .bio-card p { 
+    line-height: 1.6; 
+    margin-bottom: 20px; 
+    color: var(--text-light); 
+    max-width: 100%; 
+  }
   .bio-card strong { color: var(--gold); font-weight: 600; }
   
-  /* Badge styling is handled by .pill and .skills-row */
-  .skills-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+  /* Badge styling */
+  .skills-row { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+    margin: 10px 0; 
+    justify-content: flex-start; 
+  }
+  .skills-row.contact-info {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    margin-top: 15px; /* Added slight top margin to separate from the paragraph */
+  }
+  /* NEW STYLE FOR IMPACT BADGES to create a bit more separation */
+  .skills-row.impact-badges {
+    margin-top: 25px; 
+    margin-bottom: 25px; /* Added spacing above the button group */
+    padding-top: 10px;
+    border-top: 1px dashed rgba(203, 173, 141, 0.2); 
+  }
+
   .skills-row span { /* Standard Skills/Pill style */
     background: rgba(203, 173, 141, 0.1); 
     color: var(--text);
@@ -86,16 +238,95 @@
     font-size: 14px;
     font-weight: 500;
   }
+  
   /* Buttons */
+  .btn-group { margin-top: 30px; }
   .btn-download { background: var(--gold); color: var(--highlight); border: none; padding: 12px 20px; border-radius: 8px; font-weight: 700; transition: var(--transition-speed); box-shadow: 0 4px 15px rgba(203, 173, 141, 0.4); }
   .btn-download:hover { background: #A48374; box-shadow: 0 6px 20px rgba(164, 131, 116, 0.6); }
   .btn-view { background: transparent; color: var(--text); border: 1px solid var(--light-border); padding: 12px 20px; border-radius: 8px; font-weight: 600; margin-left: 15px; transition: var(--transition-speed); }
   .btn-view:hover { background: var(--highlight); border-color: var(--gold); }
-  .availability-note { font-size: 13px; color: var(--muted); margin-top: 20px; padding-top: 10px; border-top: 1px dashed rgba(203, 173, 141, 0.2); }
+  .availability-note { 
+    font-size: 13px; 
+    color: var(--muted); 
+    margin-top: 25px; 
+    padding-top: 15px; 
+    border-top: 1px dashed rgba(203, 173, 141, 0.2); 
+    max-width: 100%;
+  }
   
   /* --- Reusable Section Styles --- */
   section { padding:72px 24px; max-width:1100px; margin:0 auto; }
   h4 { font-family:"Playfair Display"; font-size:28px; margin-bottom:24px; color:var(--text); }
+  
+  /* --- EXPERIENCE CARD STYLES - FLOATING EFFECT --- */
+  .exp-container {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+  }
+  .exp-card {
+    flex: 1;
+    background: var(--highlight); 
+    padding: 30px; 
+    border-radius: 24px; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(203, 173, 141, 0.1); 
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative; 
+    border: none; 
+    min-height: 280px; 
+  }
+  .exp-card:hover {
+    transform: translateY(-10px) scale(1.01); 
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15); 
+  }
+  .exp-card h5 {
+    font-family: 'Playfair Display';
+    font-size: 22px; 
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: var(--text); 
+  }
+  .exp-card .company {
+    font-size: 15px; 
+    color: var(--muted); 
+    margin-bottom: 15px;
+    display: block;
+  }
+  .exp-card ul {
+    padding-left: 20px; 
+    margin: 15px 0 0; 
+    line-height: 1.7; 
+    color: var(--text-light);
+  }
+  .exp-card li {
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+  .exp-card strong {
+    color: var(--gold);
+    font-weight: 700;
+  }
+  /* Inventure Logo Placeholder */
+  .inventure-logo {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #A48374, #3A2D28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--highlight);
+      font-weight: 800;
+      font-size: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+  }
+  
+  /* --- TIMELINE/OTHER SECTION STYLES --- */
   .timeline { border-left:2px solid var(--light-border); padding-left:20px; margin-top:24px; }
   .t-item { margin-bottom:30px; position:relative; }
   .t-dot { width:14px; height:14px; background:var(--gold); border-radius:50%; position:absolute; left:-29px; top:4px; box-shadow:0 4px 10px rgba(203,173,141,0.4); }
@@ -105,17 +336,49 @@
   .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
   .card { background: var(--highlight); padding:20px; border-radius:18px; box-shadow:var(--card-shadow); transition:0.3s; }
   .cert-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
-  .cert-card { border-left:5px solid var(--gold); background: var(--highlight); padding:20px; border-radius:18px; box-shadow:var(--card-shadow); display:flex; gap:15px; align-items:center; transition:0.3s; }
-  .cert-card a { color:var(--gold); font-weight:600; font-size:14px; margin-top:8px; display:inline-block; }
-  .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
-  .pill { background:rgba(203, 173, 141, 0.2); padding:8px 12px; border-radius:999px; color:var(--text); border:1px solid rgba(203,173,141,0.05); font-weight:600; font-size:13px; }
+  
+  /* --- LANGUAGE GRID STYLES (2x2) --- */
+  .language-grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 24px; 
+      margin-top: 24px; 
+  }
+  
+  /* LANGUAGE CARD SPECIFIC STYLES */
+  .language-card {
+    border-left:5px solid var(--gold); 
+    background: var(--highlight); 
+    padding:20px; 
+    border-radius:18px; 
+    box-shadow:var(--card-shadow); 
+    transition:0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .language-card h5 { 
+    margin: 0 0 5px 0; 
+    color: var(--text); 
+    font-size: 18px; 
+  }
+  .language-card p {
+    color: var(--text-light);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .language-card .pill {
+    margin-top: 10px;
+    display: inline-block;
+  }
   
   /* --- THANK YOU PAGE STYLES --- */
   #thank-you {
     background: var(--dark-bg);
     color: var(--highlight);
     text-align: center;
-    padding: 15vh 24px; /* Vertical centering effect */
+    padding: 15vh 24px; 
   }
   #thank-you h4 {
     font-family: 'Alice', serif;
@@ -155,18 +418,71 @@
 
   /* Responsive Adjustments */
   @media (max-width: 900px) {
-    .hero-container { flex-direction: column; align-items: stretch; gap: 24px; }
+    /* Collapse hero section to stacked layout */
+    .hero-container {
+        flex-direction: column;
+        align-items: center; /* Center items when stacked */
+        gap: 20px;
+    }
+    .profile-photo-wrapper {
+        /* Allow photo to take up slightly less space but be centered */
+        flex-basis: auto;
+        max-width: 250px;
+        margin-top: 0;
+    }
+    .profile-image {
+        /* Ensure image doesn't look too massive on small screens */
+        max-height: 300px;
+    }
+    .bio-card { 
+        padding: 30px 20px; 
+        text-align: center; /* Center text on mobile */
+        flex-basis: auto;
+    }
+    .bio-card h2 { font-size: 30px; }
+    .bio-card h3 { font-size: 16px; }
+    .skills-row { 
+        justify-content: center; /* Center badges on mobile */
+    }
+    .skills-row.contact-info {
+        justify-content: center;
+    }
+    .hero-container { padding: 40px 16px; }
     nav { display: none; }
     #thank-you h4 { font-size: 32px; }
+    .btn-view { margin-left: 0; margin-top: 15px; display: block; }
   }
+  @media (max-width: 768px) {
+      .exp-container {
+          flex-direction: column;
+      }
+      .language-grid {
+          grid-template-columns: 1fr; /* Collapse to 1 column on mobile */
+      }
+  }
+
   </style>
 </head>
 
-<body>
+<body class="no-scroll">
+
+    <!-- === SPLASH SCREEN / LANDING PAGE === -->
+    <div id="splash-screen">
+        <h1 class="splash-title">Hello and welcome!</h1>
+        <p class="splash-subtitle">TO MY PROFESSIONAL PROFILE</p>
+        
+        <a id="splash-cta-btn" class="splash-cta">
+            Want to Know More about me
+            <!-- SVG for the animated down arrow -->
+            <svg class="arrow-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 17.586l-4.293-4.293a1 1 0 00-1.414 1.414l6 6a1 1 0 001.414 0l6-6a1 1 0 00-1.414-1.414L13 17.586V4a1 1 0 00-2 0v13.586z"></path></svg>
+        </a>
+    </div>
+
   
   <header>
     <div class="brand">
-      <div class="logo-box">MX</div>
+      <!-- Logo Box now uses the uploaded image_93f7e7.png via CSS background -->
+      <div class="logo-box"></div> 
       <h1>Merin Xavy</h1>
     </div>
     <nav>
@@ -184,103 +500,102 @@
 
   <main>
     
+    <!-- === HERO/ABOUT SECTION (Photo to the side of the Card, 40:60 Ratio) === -->
     <section class="hero-container" id="about">
-      
+        
+      <!-- Profile Picture - NOW IN A 40% WIDE WRAPPER -->
+      <div class="profile-photo-wrapper">
+        <img src="Linkedln.jpg" alt="Merin Xavy Professional Portrait" class="profile-image">
+      </div>
+        
+      <!-- Bio Card - NOW IN A 60% WIDE CONTAINER -->
       <div class="bio-card">
+        
         <h2>Merin Xavy</h2>
         <h3>Financial Analyst · Corporate Controlling · Risk & Compliance</h3>
 
-        <p>Aspiring CFA and International Business Master's candidate focused on strategic financial roles. I specialize in Risk Management and designing data-driven finance solutions (SQL, BI), with a proven record of measurable impact.</p>
-
+        <!-- START: Professional Focus Badges -->
         <div class="skills-row">
             <span class="pill">Financial Analysis</span>
             <span class="pill">Strategic Finance</span>
             <span class="pill">Corporate Controlling</span>
             <span class="pill">Risk Management</span>
         </div>
-        <div class="skills-row">
+        <!-- END: Professional Focus Badges -->
+        
+        <!-- START: Bio Description -->
+        <p>Aspiring CFA and International Business Master's candidate focused on strategic financial roles. I specialize in Risk Management and designing data-driven finance solutions (SQL, BI), with a proven record of measurable impact.</p>
+        <!-- END: Bio Description -->
+        
+        <!-- REMOVED: Contact Info Badges (Removed for cleaner presentation, as info is in the footer) -->
+
+        <!-- START: Impact Badges (MOVED HERE - Above the Download CV button) -->
+        <div class="skills-row impact-badges">
             <span class="pill">25% Revenue Growth</span>
             <span class="pill">25% Process Optimization</span>
         </div>
-        <div class="skills-row" style="margin-top: 20px;">
-          <span class="pill">SQL</span>
-          <span class="pill">Power BI</span>
-          <span class="pill">Advanced Excel</span>
-          <span class="pill">Financial Modeling</span>
-          <span class="pill">CFA Aspirant</span>
-        </div>
-        <div style="margin-top: 30px;">
+        <!-- END: Impact Badges (MOVED HERE) -->
+
+        <div class="btn-group">
           <a href="Financial Analyst and Controller Resume_Merin Xavy.pdf" target="_blank" class="btn-download">Download CV (PDF)</a>
           <a href="#projects" class="btn-view">View Projects</a>
         </div>
         
+        <!-- Availability Section -->
         <div class="availability-note">
-          Availability: Full-time from **March 2026** for compulsory internship | Languages: English (Fluent-C1) , French (Basic-A2) , Hindi (Intermediary-B1)
+          Open to Work - Availability: Full-time from March 2026 for compulsory internship | Full time position
         </div>
-      </div>
-
-      <div class="bio-card" style="flex: 1 1 35%;">
-        
-        <div style="text-align: center; margin-bottom: 20px;">
-          <video id="profile-video" autoplay loop muted playsinline 
-                 style="max-width: 180px; height: auto; border-radius: 10px; object-fit: cover; margin: 0 auto; border: 3px solid var(--gold); box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
-            <source src="untitled_design.mp4" type="video/mp4">
-            <img src="Linkedln.jpg" alt="Merin Xavy Professional Portrait" style="width: 180px; height: auto; border-radius: 10px; object-fit: cover; margin: 0 auto;">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-
-        <p style="color:var(--text); font-weight: 600; text-align: center;">Contact & Location</p>
-        <ul style="list-style: none; padding: 0; font-size: 15px;">
-          <li style="margin-bottom: 8px; color: var(--text);">🌍 **Lyon, France** </li>
-          <li style="margin-bottom: 8px;"><a href="mailto:xavy.merin@gmail.com" style="color:var(--muted);">📧 xavy.merin@gmail.com</a> </li>
-          <li style="margin-bottom: 8px;"><a href="https://www.linkedin.com/in/merin-xavy/" target="_blank" style="color:var(--muted);">🔗 linkedin.com/in/merin-xavy/</a> </li>
-          <li style="margin-bottom: 0; color: var(--muted);">📞 +33 6 03 83 89 03 </li>
-        </ul>
       </div>
 
     </section>
 
+    <!-- === PROFESSIONAL EXPERIENCE (UPDATED FLOATING CARDS) === -->
     <section id="experience">
       <h4>Professional Experience</h4>
-      <div class="timeline">
-        <div class="t-item">
-          <div class="t-dot"></div>
-          <div class="t-content">
-            <h5>Retail Finance Assistant <span style="font-weight:400; color:var(--muted)">| Milan Stores, Thrissur, India</span> </h5>
-            <p>Apr 2021 - Aug 2024 (Apprenticeship) </p>
-            <ul>
-              <li>Supported budgeting and forecasting by analyzing financial data and cost-saving opportunities.</li>
-              <li>*Boosted monthly revenue collections by 25%* through improved payment tracking.</li>
-              <li>Maintained accurate records of sales, expenses, and inventory to aid decision-making.</li>
-            </ul>
+      <div class="exp-container">
+        
+        <!-- Card 1: Retail Finance Assistant -->
+        <div class="exp-card">
+          <h5>Retail Finance Assistant</h5>
+          <span class="company">Milan Stores, Thrissur, India | Apr 2021 - Aug 2024 (Apprenticeship)</span>
+          <ul>
+            <li>Supported budgeting and forecasting by analyzing financial data and cost-saving opportunities.</li>
+            <li>Boosted monthly revenue collections by 25% through improved payment tracking.</li>
+            <li>Maintained accurate records of sales, expenses, and inventory to aid decision-making.</li>
+            <li>Tracked revenue trends with the sales team to drive business growth.</li>
+          </ul>
+        </div>
+        
+        <!-- Card 2: Finance & Accounting Intern (with Logo) -->
+        <div class="exp-card">
+          <h5>Finance & Accounting Intern</h5>
+          <span class="company">Inventure Metal Products Industries LLC, Dubai, UAE | Apr 2024</span>
+          <ul>
+            <li>Reduced invoice processing time by 25% through efficient data entry and reconciliation.</li>
+            <li>Processed invoices, reconciled accounts, and assisted in preparing financial reports.</li>
+            <li>Conducted journal entry adjustments to maintain the integrity of financial statements.</li>
+            <li>Verified account balances and performed monthly bank reconciliation.</li>
+          </ul>
+          <!-- Inventure Logo Placeholder -->
+          <div class="inventure-logo">
+            INV
           </div>
         </div>
-        <div class="t-item">
-          <div class="t-dot"></div>
-          <div class="t-content">
-            <h5>Finance & Accounting Intern <span style="font-weight:400; color:var(--muted)">| Inventure Metal Products, Dubai, UAE</span> </h5>
-            <p>Apr 2024 </p>
-            <ul>
-              <li>**Reduced invoice processing time by 25%** through efficient data entry and reconciliation.</li>
-              <li>Processed invoices, reconciled accounts, and assisted in preparing financial reports.</li>
-              <li>Conducted journal entry adjustments to maintain the integrity of financial statements.</li>
-            </ul>
-          </div>
-        </div>
+
       </div>
     </section>
 
+    <!-- === PROJECTS === -->
     <section id="projects">
       <h4>Key Projects & Simulations</h4>
       <div class="projects-grid">
         <div class="card">
           <h5>SQL-Based Business Intelligence Dashboards</h5>
-          <p>Improved reporting efficiency by **20%** through analysis of financial systems.Developed SQL-based BI dashboards, enhancing real-time financial insights.</p>
+          <p>Improved reporting efficiency by 20% through analysis of financial systems.Developed SQL-based BI dashboards, enhancing real-time financial insights.</p>
         </div>
         <div class="card">
           <h5>Goldman Sachs Operations Job Simulation</h5>
-          <p>Simulated trade settlements, ensuring compliance and risk protocols .**Reduced settlement discrepancies by 20%** through cross-functional collaboration and process optimization.</p>
+          <p>Simulated trade settlements, ensuring compliance and risk protocols .Reduced settlement discrepancies by 20% through cross-functional collaboration and process optimization.</p>
         </div>
         <div class="card">
           <h5>Investment Strategy Capstone Project</h5>
@@ -289,6 +604,7 @@
       </div>
     </section>
 
+    <!-- === EDUCATION === -->
     <section id="education">
       <h4>Education</h4>
       <div class="timeline">
@@ -297,7 +613,7 @@
           <div class="t-content">
             <h5>Master in Management, International Business Administration</h5>
             <p>ESDES Business School, Catholic University of Lyon, France (Sep 2024 - Current) </p>
-            <p style="font-size:14px; margin-bottom:8px;">**Relevant Coursework:** International Corporate Finance, Financial Analysis, Risk Management, Corporate Governance, Data Management.</p>
+            <p style="font-size:14px; margin-bottom:8px;">Relevant Coursework: International Corporate Finance, Financial Analysis, Risk Management, Corporate Governance, Data Management.</p>
           </div>
         </div>
         <div class="t-item">
@@ -305,12 +621,13 @@
           <div class="t-content">
             <h5>Bachelor of Commerce, Finance (First Class with Distinction)</h5>
             <p>Christ College Autonomous, Irinjalakuda, India (Jul 2021 - Apr 2024) </p>
-            <p style="font-size:14px; margin-bottom:8px;">**Achievement:** Senior Women's Council Leader (2023-24) – led campus sustainability initiatives.</p>
+            <p style="font-size:14px; margin-bottom:8px;">Achievement: Senior Women's Council Leader (2023-24) – led campus sustainability initiatives.</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- === SKILLS & EXPERTISE === -->
     <section id="skills">
       <h4>Skills & Expertise</h4>
       <div id="radar" style="max-width: 500px; margin: 0 auto 40px;">
@@ -318,8 +635,8 @@
       </div>
 
       <div style="margin-top:40px;">
-        <h5 style="font-family:'Inter'; margin-bottom:15px; color:var(--text); font-size: 18px;">Core Proficiencies:</h5>
-        <div class="meta">
+        <h5 style="font-family:'Inter'; margin-bottom:15px; color:var(--text); font-size: 18px; text-align: center;">Core Proficiencies:</h5>
+        <div class="meta skills-row">
           <span class="pill">Financial Modeling & Forecasting</span> 
           <span class="pill">Data Analysis & Reporting</span>
           <span class="pill">Investment & Risk Analysis</span>
@@ -332,6 +649,7 @@
       </div>
     </section>
     
+    <!-- === CERTIFICATIONS === -->
     <section id="certifications">
       <h4>Certifications & Professional Courses</h4>
       <div class="cert-grid">
@@ -360,7 +678,7 @@
           <div class="cert-info">
             <h5>Business Analysis and Process Management</h5>
             <p style="font-size:14px; margin:4px 0 0; color:var(--muted);">Coursera </p>
-            <a href="[LINK_TO_CERTIFICATE]" target="_blank" rel="noopener">View Certificate</a>
+            <a href="https://www.coursera.org/account/accomplishments/verify/F65HSAB9PLR2" target="_blank" rel="noopener">View Certificate</a>
           </div>
         </div>
         <div class="cert-card">
@@ -379,28 +697,34 @@
         </div>
       </div>
     </section>
+
+    <!-- === LANGUAGE SKILLS (2x2 Grid) === -->
     <section id="languages">
       <h4>Language Proficiency</h4>
       
-      <div class="cert-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      <div class="language-grid">
         
+        <!-- English -->
         <div class="language-card" style="border-left-color: #3A2D28;">
             <h5>English 🇬🇧</h5>
             <p>Aspiring CFA and International Business Master's candidate focused on strategic financial roles. I specialize in Risk Management and designing data-driven finance solutions (SQL, BI), with a proven record of measurable impact.</p>
             <span class="pill" style="background: rgba(203, 173, 141, 0.4);">Fluent (C1)</span>
         </div>
         
+        <!-- French -->
         <div class="language-card" style="border-left-color: #A48374;">
             <h5>French 🇫🇷</h5>
             <p>Aspirant CFA et candidat au Master en Administration des Affaires Internationales, axé sur les rôles financiers stratégiques. Je me spécialise en gestion des risques et en conception de solutions financières basées sur les données (SQL, BI), avec un impact mesurable avéré.</p>
             <span class="pill" style="background: rgba(164, 131, 116, 0.2);">Basic Knowledge (A2)</span>
         </div>
         
+        <!-- Hindi (Bio removed) -->
         <div class="language-card" style="border-left-color: #3A2D28;">
             <h5>Hindi 🇮🇳</h5>
             <span class="pill" style="background: rgba(203, 173, 141, 0.3);">Working Proficiency</span>
         </div>
 
+        <!-- Malayalam (Bio removed) -->
         <div class="language-card" style="border-left-color: #A48374;">
             <h5>Malayalam 🇮🇳</h5>
             <span class="pill" style="background: rgba(164, 131, 116, 0.3);">Bilingual (Native)</span>
@@ -408,17 +732,44 @@
 
       </div>
     </section>
+    <!-- END LANGUAGE SKILLS SECTION -->
 
+    <!-- === CHRONOLOGICAL TIMELINE === -->
     <section id="timeline">
       <h4>Chronological Journey</h4>
       <div class="timeline">
-        <div class="t-item"><div class="t-dot"></div><div class="t-content"><h5>Sep 2024 – Current</h5><p>Masters in Management, ESDES Business School, Lyon, France </p></div></div>
-        <div class="t-item"><div class="t-dot"></div><div class="t-content"><h5>Mar 2026 (Starting)</h5><p>**Compulsory Internship** begins for Master's degree.</p></div></div>
-        <div class="t-item"><div class="t-dot"></div><div class="t-content"><h5>Jul 2021 – Apr 2024</h5><p>Bachelor of Commerce – Finance, Christ College (Autonomous), India </p></div></div>
-        <div class="t-item"><div class="t-dot"></div><div class="t-content"><h5>Apr 2021 – Aug 2024</h5><p>Retail Finance Assistant Apprenticeship, Milan Stores, India </p></div></div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-content">
+            <h5>Sep 2024 – Current</h5>
+            <p>Masters in Management, ESDES Business School, Lyon, France </p>
+          </div>
+        </div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-content">
+            <h5>Mar 2026 (Starting)</h5>
+            <p>**Compulsory Internship** begins for Master's degree.</p>
+          </div>
+        </div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-content">
+            <h5>Jul 2021 – Apr 2024</h5>
+            <p>Bachelor of Commerce – Finance, Christ College (Autonomous), India </p>
+          </div>
+        </div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-content">
+            <h5>Apr 2021 – Aug 2024</h5>
+            <p>Retail Finance Assistant Apprenticeship, Milan Stores, India </p>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- === THANK YOU PAGE === -->
     <section id="thank-you">
         <h4>Thank you for your time for learning about me.</h4>
         <p>I look forward to connecting with you about opportunities.</p>
@@ -429,14 +780,44 @@
   <footer>
     <p>&copy; 2025 Merin Xavy. All rights reserved.</p>
     <div class="footer-contact">
-        <span>📍 Lyon, France </span>
-        <a href="mailto:xavy.merin@gmail.com">📧 xavy.merin@gmail.com </a>
-        <span>📞 +33 6 03 83 89 03 </span>
-        <a href="https://www.linkedin.com/in/merin-xavy/" target="_blank">🔗 LinkedIn </a>
+        <span> Lyon, France | </span>
+        <a href="mailto:xavy.merin@gmail.com">xavy.merin@gmail.com | </a>
+        <span> +33 6 03 83 89 03 | </span>
+        <a href="https://www.linkedin.com/in/merin-xavy/" target="_blank">LinkedIn </a>
     </div>
   </footer>
 
   <script>
+    // --- SPLASH SCREEN LOGIC ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const splashScreen = document.getElementById('splash-screen');
+        const splashCta = document.getElementById('splash-cta-btn');
+        const body = document.body;
+
+        const hideSplash = () => {
+            // Start the fade-out transition
+            splashScreen.style.opacity = '0';
+            
+            // Wait for the transition to complete (0.8s, matching CSS transition)
+            setTimeout(() => {
+                // Hide the screen completely
+                splashScreen.style.visibility = 'hidden';
+                // Remove the no-scroll class to allow scrolling of the main content
+                body.classList.remove('no-scroll');
+            }, 800);
+        };
+
+        // Attach the click event to the CTA
+        splashCta.addEventListener('click', (e) => {
+            e.preventDefault();
+            hideSplash();
+        });
+        
+        // Ensure the body starts with no-scroll to keep the splash page fixed
+        body.classList.add('no-scroll');
+
+    });
+
     // Radar Chart - Data is illustrative; customize values (0-100)
     const ctx = document.getElementById('radarChart').getContext('2d');
     const radarChart = new Chart(ctx, {
